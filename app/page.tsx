@@ -20,7 +20,7 @@ import { StaggerItem, StaggerOnView } from "@/components/hero/StaggerOnView";
 import { ThesisAiCallout } from "@/components/thesis/ThesisAiCallout";
 import { ThesisFocusSteps } from "@/components/thesis/ThesisFocusSteps";
 import { Button, Container, SectionLabel, Tag } from "@/components/ui";
-import { SOCIAL_DISCORD_URL, SOCIAL_X_URL } from "@/lib/site";
+import { SOCIAL_X_URL } from "@/lib/site";
 
 /** Mandate line used in hero marquee and sitewide positioning. */
 const STRIP_MANDATE = "Crypto, fintech, deep tech, and anything in between";
@@ -504,14 +504,6 @@ export default function Home() {
                   variant="primary"
                 >
                   Message on X
-                </Button>
-                <Button
-                  href={SOCIAL_DISCORD_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="secondary"
-                >
-                  Discord
                 </Button>
                 <Button href="mailto:hello@adhdcapital.xyz" variant="secondary">
                   Email us

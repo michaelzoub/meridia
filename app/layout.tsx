@@ -55,8 +55,6 @@ export const metadata: Metadata = {
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: ["/adhd_banner.png"],
   },
-  // Discord (and Slack, iMessage, etc.) unfurl links using standard Open Graph tags — same as
-  // `openGraph` above, including `images` and `metadataBase` for absolute image URLs.
 };
 
 export default function RootLayout({

@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Container, SectionLabel } from "@/components/ui";
 import { getWritingPosts } from "@/lib/writing/queries";
-import { SOCIAL_DISCORD_URL, SOCIAL_X_URL } from "@/lib/site";
+import { SOCIAL_X_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Writing | ADHD Capital",
@@ -43,15 +43,6 @@ export default async function WritingPage() {
                   rel="noopener noreferrer"
                 >
                   @CapitalADHD
-                </a>{" "}
-                or{" "}
-                <a
-                  href={SOCIAL_DISCORD_URL}
-                  className="text-cyan-800 underline decoration-cyan-800/30 underline-offset-4 hover:decoration-cyan-800"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Discord
                 </a>{" "}
                 for updates.
               </li>

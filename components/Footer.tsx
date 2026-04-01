@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { SectionReveal } from "@/components/hero/SectionReveal";
 import { Container } from "@/components/ui";
-import { SOCIAL_DISCORD_URL, SOCIAL_X_URL } from "@/lib/site";
+import { SOCIAL_X_URL } from "@/lib/site";
 
 const columns = [
   {
@@ -21,7 +21,6 @@ const columns = [
     links: [
       { label: "Contact", href: "/#discover" },
       { label: "Research & updates", href: SOCIAL_X_URL, external: true },
-      { label: "Discord", href: SOCIAL_DISCORD_URL, external: true },
     ],
   },
   {
@@ -95,14 +94,6 @@ export function Footer() {
                 className="mt-4 block font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
               >
                 @CapitalADHD
-              </a>
-              <a
-                href={SOCIAL_DISCORD_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 block font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
-              >
-                Discord
               </a>
             </div>
           </div>
