@@ -23,12 +23,12 @@ export function AnnouncementBar() {
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="w-full border-b border-white/10 bg-black"
         >
-          <Container className="max-w-none px-3 py-3 md:px-8 md:py-2.5 lg:px-12">
-            {/* md+: equal side tracks so the center line sits in true viewport center */}
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-3 lg:gap-5">
-              <div className="flex min-w-0 items-center justify-between gap-3 md:justify-self-start">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-                  <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400 md:text-[11px] md:font-medium md:tracking-[0.16em] md:text-white">
+          <Container className="max-w-none px-3 py-2 md:px-8 md:py-2.5 lg:px-12">
+            {/* Mobile: single row, memo + thesis left, dismiss right (text only). Desktop: 3-col + caption. */}
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-3 lg:gap-5">
+              <div className="flex min-h-10 w-full items-center justify-between gap-2 md:contents md:min-h-0">
+                <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-x-2.5 sm:gap-x-3 md:min-w-0 md:flex-initial md:justify-self-start">
+                  <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-white md:text-[11px] md:font-medium md:tracking-[0.16em]">
                     Research memo
                   </span>
                   <Link
@@ -41,19 +41,19 @@ export function AnnouncementBar() {
                 <button
                   type="button"
                   onClick={dismiss}
-                  className="shrink-0 rounded border border-white/15 bg-white/5 px-2.5 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:border-white/25 hover:text-zinc-200 md:hidden"
+                  className="shrink-0 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white md:hidden"
                   aria-label="Dismiss announcement"
                 >
                   Dismiss
                 </button>
               </div>
-              <p className="min-w-0 justify-self-center text-balance text-center font-serif-display text-[13px] leading-snug tracking-normal text-zinc-400 md:max-w-[min(100%,48rem)] md:px-2 md:text-[12px] md:uppercase md:leading-snug md:tracking-[0.06em] md:text-white">
+              <p className="hidden min-w-0 justify-self-center text-balance text-center font-serif-display md:block md:max-w-[min(100%,48rem)] md:px-2 md:text-[12px] md:uppercase md:leading-snug md:tracking-[0.06em] md:text-white">
                 Why crypto, fintech, deep tech, and anything in between rewards obsessive due diligence.
               </p>
               <button
                 type="button"
                 onClick={dismiss}
-                className="hidden shrink-0 justify-self-end font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white md:block"
+                className="hidden shrink-0 justify-self-end py-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white md:block"
                 aria-label="Dismiss announcement"
               >
                 Dismiss
