@@ -31,7 +31,7 @@ export function AnnouncementBar() {
               </span>
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 md:justify-end">
                 <Link
-                  href="#thesis"
+                  href="/#thesis"
                   className="text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-[var(--color-accent-cyan)]"
                 >
                   Read thesis →

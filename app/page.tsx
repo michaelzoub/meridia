@@ -269,7 +269,7 @@ export default function Home() {
                   not under-hyped.
                 </h2>
               </div>
-              <div className="mt-12 border border-dashed border-zinc-300 bg-zinc-50 p-6 md:p-8">
+              <div className="mt-12 border border-dashed border-zinc-300 bg-zinc-50 p-4 md:p-8">
                 <p className="max-w-2xl font-serif-display text-lg leading-relaxed text-zinc-700">
                   We bias toward teams who want reviewers that read code, cite sources, and write the
                   uncomfortable questions into the appendix—whether or not a check ever follows.
@@ -285,7 +285,7 @@ export default function Home() {
             <AtAGlanceFloatingPaths />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white from-35% via-white/92 to-sky-50/35" />
             <Container className="relative z-[1]">
-              <div className="border border-dashed border-zinc-400 bg-white/95 p-8 md:p-10 lg:p-12">
+              <div className="border border-dashed border-zinc-400 bg-white/95 p-5 md:p-10 lg:p-12">
                 <div className="max-w-3xl">
                   <SectionLabel>At a glance</SectionLabel>
                   <h2 className="mt-2 font-sans text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl lg:max-w-[42rem]">
@@ -462,7 +462,7 @@ export default function Home() {
         <SectionReveal amount={0.08}>
         <section id="discover" className="scroll-mt-24 bg-white py-20 md:py-28">
           <Container className="grid gap-10 md:grid-cols-2 md:items-stretch md:gap-8">
-            <div className="flex flex-col justify-center border border-dashed border-zinc-400 bg-white p-6 md:p-8">
+            <div className="flex flex-col justify-center border border-dashed border-zinc-400 bg-white p-4 md:p-8">
               <SectionLabel>Contact</SectionLabel>
               <h2 className="mt-2 font-sans text-3xl font-semibold leading-tight tracking-tight text-zinc-950 md:text-4xl">
                 Building in <span className="text-cyan-800">crypto</span> or{" "}
