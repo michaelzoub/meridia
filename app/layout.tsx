@@ -25,13 +25,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "ADHD Capital | Research firm — crypto & deep tech",
+  title:
+    "ADHD Capital | Research firm — crypto, fintech, deep tech, and anything in between",
   description:
-    "ADHD Capital is a research-led collective focused on crypto and deep tech. We publish memos, models, and data—capital is secondary to the work.",
+    "ADHD Capital is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
   openGraph: {
     title: "ADHD Capital",
     description:
-      "Research-first collective covering crypto networks and deep tech. Evidence, not headlines.",
+      "Research-first collective covering crypto, fintech, deep tech, and anything in between. Evidence, not headlines.",
   },
 };
 

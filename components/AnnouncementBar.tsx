@@ -23,30 +23,42 @@ export function AnnouncementBar() {
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="border-b border-white/10 bg-black"
         >
-          <div className="py-2.5 text-[11px] text-zinc-500">
-            <Container className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center font-mono uppercase tracking-[0.16em] md:justify-between md:text-left">
-              <span className="text-zinc-600">Research memo</span>
-              <span className="text-zinc-400">
-                Why early-stage crypto and deep tech rewards obsessive due diligence.
-              </span>
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 md:justify-end">
+          <Container className="flex flex-col gap-2 py-2.5 md:flex-row md:items-center md:gap-8 md:py-2.5">
+            {/* Row 1 mobile: label + CTA | dismiss. Desktop: merged into one row with message between */}
+            <div className="flex items-center justify-between gap-4 md:contents">
+              <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 md:shrink-0">
+                <span className="shrink-0 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-500 md:text-[11px]">
+                  Research memo
+                </span>
                 <Link
                   href="/#thesis"
-                  className="text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-[var(--color-accent-cyan)]"
+                  className="shrink-0 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-white underline decoration-white/35 underline-offset-4 transition-colors hover:decoration-[var(--color-accent-cyan)] md:text-[11px]"
                 >
                   Read thesis →
                 </Link>
-                <button
-                  type="button"
-                  onClick={dismiss}
-                  className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 underline-offset-4 transition-colors hover:text-zinc-300"
-                  aria-label="Dismiss announcement"
-                >
-                  Dismiss
-                </button>
               </div>
-            </Container>
-          </div>
+              <button
+                type="button"
+                onClick={dismiss}
+                className="shrink-0 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-zinc-300 md:hidden"
+                aria-label="Dismiss announcement"
+              >
+                Dismiss
+              </button>
+            </div>
+            <p className="max-w-none text-center font-mono text-[10px] font-medium uppercase leading-snug tracking-[0.1em] text-zinc-400 md:min-w-0 md:flex-1 md:text-left md:text-[11px] md:leading-normal md:tracking-[0.14em]">
+              Why crypto, fintech, deep tech, and anything in between rewards obsessive due
+              diligence.
+            </p>
+            <button
+              type="button"
+              onClick={dismiss}
+              className="hidden shrink-0 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-zinc-300 md:block"
+              aria-label="Dismiss announcement"
+            >
+              Dismiss
+            </button>
+          </Container>
         </motion.div>
       ) : null}
     </AnimatePresence>

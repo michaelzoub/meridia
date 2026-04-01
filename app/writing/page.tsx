@@ -9,7 +9,7 @@ import { getWritingPosts } from "@/lib/writing/queries";
 export const metadata: Metadata = {
   title: "Writing | ADHD Capital",
   description:
-    "Essays, memos, and notes from the ADHD Capital research desk—crypto, protocols, and deep tech.",
+    "Essays, memos, and notes from the ADHD Capital research desk—crypto, fintech, deep tech, and anything in between.",
 };
 
 /** Always render on the server so database-backed content is included in the HTML payload. */

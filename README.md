@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+**NO GLOWING DESIGN** — UI uses flat borders and subtle solids; see `AGENTS.md` for agent-facing design rules.
+
 ## Getting Started
 
 First, run the development server:
