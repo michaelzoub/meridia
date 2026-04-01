@@ -47,7 +47,7 @@ export function AnnouncementBar() {
                   Dismiss
                 </button>
               </div>
-              <p className="hidden min-w-0 justify-self-center text-balance text-center font-serif-display md:block md:max-w-[min(100%,48rem)] md:px-2 md:text-[12px] md:uppercase md:leading-snug md:tracking-[0.06em] md:text-white">
+              <p className="hidden max-w-none text-center font-mono text-[10px] font-medium uppercase leading-snug tracking-[0.1em] text-zinc-400 md:block md:min-w-0 md:flex-1 md:text-left md:text-[11px] md:leading-normal md:tracking-[0.14em]">
                 Why crypto, fintech, deep tech, and anything in between rewards obsessive due diligence.
               </p>
               <button
