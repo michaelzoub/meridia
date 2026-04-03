@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { FooterCornerSquarcles } from "@/components/backgrounds/FooterCornerSquarcles";
 import { SectionReveal } from "@/components/hero/SectionReveal";
 import { Container } from "@/components/ui";
 import { SOCIAL_X_URL } from "@/lib/site";
@@ -34,8 +35,9 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-zinc-800 bg-black text-white">
-      <SectionReveal amount={0.1} delay={0.04} className="py-16 md:py-20">
+    <footer className="relative overflow-hidden border-t border-zinc-800 bg-black text-white">
+      <FooterCornerSquarcles />
+      <SectionReveal amount={0.1} delay={0.04} className="relative z-[1] py-16 md:py-20">
         <Container>
           <div className="grid gap-12 md:grid-cols-[1fr_1fr_1fr_auto] md:items-start md:gap-10">
             {columns.map((col) => (
