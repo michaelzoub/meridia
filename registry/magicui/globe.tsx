@@ -53,7 +53,7 @@ export function Globe({ className }: GlobeProps) {
     });
 
     const loop = () => {
-      phi += 0.006;
+      phi += 0.003;
       globe?.update({ phi });
       raf = window.requestAnimationFrame(loop);
     };

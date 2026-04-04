@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { AtAGlanceFloatingPaths } from "@/components/backgrounds/FloatingPaths";
+import PixelBlast from "@/components/backgrounds/PixelBlast";
+import Threads from "@/components/backgrounds/Threads";
 import { TopographyBackground } from "@/components/backgrounds/TopographyBackground";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -63,17 +65,12 @@ const focusSteps = [
   {
     n: "01",
     title: "Research is the product",
-    body: "We publish memos, models, and datasets you can trace—protocol economics, security assumptions, frontier compute, and explicit what-has-to-be-true statements. We spearhead large parts of the desk with AI agents (retrieval, drafting, adversarial review loops) and we support that tooling so the method stays inspectable—not a black box.",
+    body: "We publish memos, models, and datasets you can trace—protocol economics, security assumptions, frontier compute, and explicit what-has-to-be-true statements. The method stays inspectable: open sources, reproducible steps, no black box.",
   },
   {
     n: "02",
     title: "Deliberate scope",
     body: "Crypto networks, fintech rails, L1/L2 and DeFi plumbing, wallets and infra, AI systems, robotics, and the messy layers in between—we say no when the work doesn't match the bar.",
-  },
-  {
-    n: "03",
-    title: "Capital, when it follows",
-    body: "We are not a spray-and-pray fund. The team stays small; deploying capital is rare and only after the research work is already standing on its own.",
   },
 ];
 
@@ -107,7 +104,7 @@ const team = [
   },
 ];
 
-/** Single in-page nav for “Why we exist” — avoids duplicating header links in two places. */
+/** Single in-page nav for "Why we exist" — avoids duplicating header links in two places. */
 const whyWeExistNav = [
   { href: "/#thesis", label: "Thesis" },
   { href: "/#work", label: "Approach" },
@@ -149,10 +146,6 @@ function HeroResearchPanel() {
     {
       label: "Methods",
       body: "Chain-native metrics, adversarial reviews, agent-assisted synthesis, and open methodology notes—we invest in how the desk uses AI without hiding the reproducibility bar.",
-    },
-    {
-      label: "Capital",
-      body: "Optional and selective—only when research conviction is already explicit.",
     },
   ];
 
@@ -340,20 +333,40 @@ export default function Home() {
                 </p>
               </div>
               <div className="mt-10 grid gap-6 md:mt-12 md:grid-cols-3">
-                <div className="border border-dashed border-zinc-400 bg-white/95 p-7 md:p-8">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
-                    Collective
-                  </p>
-                  <p className="mt-4 font-sans text-2xl font-semibold tracking-tight text-zinc-900 md:text-3xl">
-                    One research bar
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-900/80">
-                    Three seats · one standard
-                  </p>
-                  <p className="mt-4 font-serif-display text-sm leading-relaxed text-zinc-600">
-                    Three seats covering markets, systems, and publishing—one standard of rigor,
-                    no siloed “opinions without work product.”
-                  </p>
+                <div className="relative overflow-hidden border border-dashed border-zinc-400 bg-white/95 p-7 md:p-8">
+                  <div className="pointer-events-none absolute inset-0" aria-hidden>
+                    <PixelBlast
+                      variant="square"
+                      pixelSize={4}
+                      color="#ddeaf6"
+                      patternScale={2}
+                      patternDensity={1}
+                      pixelSizeJitter={0}
+                      enableRipples
+                      rippleSpeed={0.4}
+                      rippleThickness={0.12}
+                      rippleIntensityScale={1.5}
+                      liquid={false}
+                      speed={0.5}
+                      edgeFade={0.25}
+                      transparent
+                    />
+                  </div>
+                  <div className="relative">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+                      Collective
+                    </p>
+                    <p className="mt-4 font-sans text-2xl font-semibold tracking-tight text-zinc-900 md:text-3xl">
+                      One research bar
+                    </p>
+                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-900/80">
+                      Three seats · one standard
+                    </p>
+                    <p className="mt-4 font-serif-display text-sm leading-relaxed text-zinc-600">
+                      Three seats covering markets, systems, and publishing—one standard of rigor,
+                      no siloed "opinions without work product."
+                    </p>
+                  </div>
                 </div>
                 <div className="relative overflow-hidden border border-dashed border-zinc-400 bg-white/95 p-7 md:p-8">
                   <div className="pointer-events-none absolute inset-0" aria-hidden>
@@ -378,18 +391,28 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <div className="border border-dashed border-zinc-400 bg-white/95 p-7 md:p-8">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
-                    Mandate
-                  </p>
-                  <p className="mt-4 font-sans text-lg font-semibold leading-snug tracking-tight text-zinc-900 md:text-xl">
-                    {STRIP_MANDATE}
-                  </p>
-                  <p className="mt-4 font-serif-display text-sm leading-relaxed text-zinc-600">
-                    L1/L2 and DeFi plumbing, fintech and custody rails, wallets and infra, frontier
-                    AI, robotics, and adjacent hardware. If it falls outside that perimeter, we are
-                    not the right desk—saying no is part of the product.
-                  </p>
+                <div className="relative overflow-hidden border border-dashed border-zinc-400 bg-white/95 p-7 md:p-8">
+                  <div className="pointer-events-none absolute inset-0" aria-hidden>
+                    <Threads
+                      color={[0.87, 0.92, 0.965]}
+                      amplitude={1}
+                      distance={0}
+                      enableMouseInteraction
+                    />
+                  </div>
+                  <div className="relative">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+                      Mandate
+                    </p>
+                    <p className="mt-4 font-sans text-lg font-semibold leading-snug tracking-tight text-zinc-900 md:text-xl">
+                      {STRIP_MANDATE}
+                    </p>
+                    <p className="mt-4 font-serif-display text-sm leading-relaxed text-zinc-600">
+                      L1/L2 and DeFi plumbing, fintech and custody rails, wallets and infra, frontier
+                      AI, robotics, and adjacent hardware. If it falls outside that perimeter, we are
+                      not the right desk—saying no is part of the product.
+                    </p>
+                  </div>
                 </div>
               </div>
             </Container>
@@ -414,7 +437,7 @@ export default function Home() {
                     </span>
                   </h2>
                   <p className="mt-4 font-serif-display text-base leading-relaxed text-zinc-800">
-                    We are a research collective first—{STRIP_MANDATE}. When we deploy capital, it is{" "}
+                    When we deploy capital it is{" "}
                     <span className="font-semibold text-cyan-900">early, concentrated</span>, and always
                     downstream of work you can read and stress-test.
                   </p>

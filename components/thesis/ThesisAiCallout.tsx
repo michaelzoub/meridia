@@ -9,7 +9,7 @@ export function ThesisAiCallout({ children }: { children: ReactNode }) {
     <div className="relative mt-5 min-h-[132px] overflow-hidden border border-cyan-500/40 bg-white">
       <FlickeringGrid
         className="absolute inset-0 min-h-full"
-        color="rgb(125, 211, 252)"
+        color="rgb(8, 145, 178)"
         squareSize={3}
         gridGap={7}
         flickerChance={0.055}
