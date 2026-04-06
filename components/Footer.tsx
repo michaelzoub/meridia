@@ -84,10 +84,10 @@ export function Footer() {
 
             <div className="md:justify-self-end">
               <a
-                href="mailto:support@adhdcapital.xyz"
+                href="mailto:support@efimov.xyz"
                 className="block font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
               >
-                support@adhdcapital.xyz
+                support@efimov.xyz
               </a>
               <a
                 href={SOCIAL_X_URL}
@@ -95,21 +95,21 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="mt-4 block font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
               >
-                @CapitalADHD
+                @efimovcapital
               </a>
             </div>
           </div>
 
           <div className="mt-14 border-t border-zinc-800 pt-10">
             <p className="max-w-4xl font-serif-display text-xs leading-relaxed text-zinc-500">
-              ADHD Capital publishes research and commentary for informational and educational
+              Efimov Capital publishes research and commentary for informational and educational
               purposes only and does not provide investment advice, investment recommendations, or
               an offer or solicitation to buy or sell any security or financial instrument. Any
               investment activity is high risk; do your own diligence and consult qualified
               advisors.
             </p>
             <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-zinc-600">
-              © {new Date().getFullYear()} ADHD Capital. All rights reserved.
+              © {new Date().getFullYear()} Efimov Capital. All rights reserved.
             </p>
           </div>
         </Container>

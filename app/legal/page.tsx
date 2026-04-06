@@ -8,9 +8,9 @@ import { Container, SectionLabel } from "@/components/ui";
 const EFFECTIVE_DATE = "April 1, 2026";
 
 export const metadata: Metadata = {
-  title: "Legal | ADHD Capital",
+  title: "Legal | Efimov Capital",
   description:
-    "Privacy policy and terms of use for ADHD Capital—how we handle research, communications, and discretionary funding-related interactions.",
+    "Privacy policy and terms of use for Efimov Capital—how we handle research, communications, and discretionary funding-related interactions.",
 };
 
 const sectionClass =
@@ -27,7 +27,7 @@ export default function LegalPage() {
             Privacy &amp; terms
           </h1>
           <p className="mt-4 max-w-2xl font-serif-display text-base leading-relaxed text-zinc-700">
-            These documents explain how ADHD Capital (&quot;ADHD Capital,&quot; &quot;we,&quot; &quot;us,&quot; or
+            These documents explain how Efimov Capital (&quot;Efimov Capital,&quot; &quot;we,&quot; &quot;us,&quot; or
             &quot;our&quot;) treats personal data and the rules that apply when you use our website and
             interact with our research and business-development process.
           </p>
@@ -58,7 +58,7 @@ export default function LegalPage() {
             <p>
               This Privacy Policy applies to personal data we process when you visit our public website
               (including pages under domains we operate, such as paths served from{" "}
-              <span className="font-mono text-[11px] text-zinc-800">adhdcapital.xyz</span> and related
+              <span className="font-mono text-[11px] text-zinc-800">efimov.xyz</span> and related
               properties we link as official), communicate with us by email or other channels we
               control, or otherwise engage with our research and discretionary capital workflow. It
               is designed to align with the transparency requirements of the EU/UK General Data
@@ -73,8 +73,8 @@ export default function LegalPage() {
                 <strong className="font-medium text-zinc-800">Identifiers and contact data:</strong>{" "}
                 name, email address, social handles, employer or project name, and similar details you
                 voluntarily provide (for example when you email{" "}
-                <a href="mailto:hello@adhdcapital.xyz">hello@adhdcapital.xyz</a> or{" "}
-                <a href="mailto:support@adhdcapital.xyz">support@adhdcapital.xyz</a>).
+                <a href="mailto:hello@efimov.xyz">hello@efimov.xyz</a> or{" "}
+                <a href="mailto:support@efimov.xyz">support@efimov.xyz</a>).
               </li>
               <li>
                 <strong className="font-medium text-zinc-800">Commercial information:</strong>{" "}
@@ -128,7 +128,7 @@ export default function LegalPage() {
               We share personal data with subprocessors that provide hosting, email delivery, security
               monitoring, and similar infrastructure, under written agreements that require
               confidentiality and appropriate safeguards. We may disclose information if required by
-              subpoena, court order, or applicable law, or to protect the rights and safety of ADHD
+              subpoena, court order, or applicable law, or to protect the rights and safety of Efimov
               Capital personnel or the public. We do not sell personal data as that term is defined
               under the California Consumer Privacy Act as amended by the California Privacy Rights Act
               (“CCPA/CPRA”), nor do we “share” it for cross-context behavioral advertising.
@@ -160,7 +160,7 @@ export default function LegalPage() {
               exceptions. California residents may exercise CPRA rights (access, deletion,
               correction, opt-out of sale/sharing—N/A here, and limiting use of sensitive data) by
               emailing{" "}
-              <a href="mailto:support@adhdcapital.xyz">support@adhdcapital.xyz</a>. We will verify
+              <a href="mailto:support@efimov.xyz">support@efimov.xyz</a>. We will verify
               requests in line with applicable law and may need additional information to process
               them. You may lodge a complaint with your local supervisory authority; the Irish Data
               Protection Commission and UK Information Commissioner’s Office publish helpful
@@ -183,7 +183,7 @@ export default function LegalPage() {
 
             <h3>11. Contact</h3>
             <p>
-              Questions: <a href="mailto:support@adhdcapital.xyz">support@adhdcapital.xyz</a>.
+              Questions: <a href="mailto:support@efimov.xyz">support@efimov.xyz</a>.
             </p>
           </section>
 
@@ -203,7 +203,7 @@ export default function LegalPage() {
 
             <h3>2. Who we are; informational nature of content</h3>
             <p>
-              ADHD Capital is a research-led collective focused on crypto, fintech, deep tech, and
+              Efimov Capital is a research-led collective focused on crypto, fintech, deep tech, and
               anything in between—including networks, rails, and frontier stacks. Everything on this
               site—including articles, memos, models,
               and charts—is provided for <strong className="font-medium text-zinc-800">informational and
@@ -216,7 +216,7 @@ export default function LegalPage() {
             <h3>3. No advisory or fiduciary relationship</h3>
             <p>
               Use of the site does not create a client, advisory, fiduciary, or partnership
-              relationship between you and ADHD Capital. Communications through email, social
+              relationship between you and Efimov Capital. Communications through email, social
               channels, or meetings—including exploratory diligence—do not constitute an agreement to
               provide services unless we both execute a separate written contract that expressly says
               so.
@@ -247,7 +247,7 @@ export default function LegalPage() {
 
             <h3>6. Intellectual property</h3>
             <p>
-              Unless otherwise noted, site content is owned by ADHD Capital or its licensors and is
+              Unless otherwise noted, site content is owned by Efimov Capital or its licensors and is
               protected by copyright and other intellectual property laws. You may view, download,
               and print reasonable portions for personal, non-commercial use, provided you keep
               attribution intact. You may not scrape the site in bulk, resell our materials, or remove
@@ -273,14 +273,14 @@ export default function LegalPage() {
             <h3>9. Disclaimers</h3>
             <p>
               THE SITE AND ALL CONTENT ARE PROVIDED “AS IS” AND “AS AVAILABLE.” TO THE MAXIMUM EXTENT
-              PERMITTED BY LAW, ADHD CAPITAL DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR
+              PERMITTED BY LAW, EFIMOV CAPITAL DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR
               STATUTORY, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
               NON-INFRINGEMENT. WE DO NOT WARRANT ERROR-FREE OR UNINTERRUPTED SERVICE.
             </p>
 
             <h3>10. Limitation of liability</h3>
             <p>
-              TO THE FULLEST EXTENT PERMITTED BY LAW, NEITHER ADHD CAPITAL NOR ITS CONTRIBUTORS WILL BE
+              TO THE FULLEST EXTENT PERMITTED BY LAW, NEITHER EFIMOV CAPITAL NOR ITS CONTRIBUTORS WILL BE
               LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY
               LOSS OF PROFITS, DATA, OR GOODWILL, ARISING OUT OF OR RELATED TO YOUR USE OF THE SITE OR
               RELIANCE ON OUR RESEARCH, EVEN IF ADVISED OF THE POSSIBILITY. OUR AGGREGATE LIABILITY FOR
@@ -293,7 +293,7 @@ export default function LegalPage() {
 
             <h3>11. Indemnity</h3>
             <p>
-              You will indemnify and hold harmless ADHD Capital and its personnel from claims, losses,
+              You will indemnify and hold harmless Efimov Capital and its personnel from claims, losses,
               and expenses (including reasonable attorneys’ fees) arising from your misuse of the site,
               your breach of these Terms, or your violation of law.
             </p>
@@ -305,7 +305,7 @@ export default function LegalPage() {
               to mandatory consumer protections where you reside, you consent to the exclusive
               jurisdiction of the state and federal courts located in Delaware for disputes arising
               from or relating to these Terms or the site, and waive any objection to inconvenient
-              forum, except that ADHD Capital may seek injunctive relief in any court of competent
+              forum, except that Efimov Capital may seek injunctive relief in any court of competent
               jurisdiction.
             </p>
 
@@ -314,13 +314,13 @@ export default function LegalPage() {
               If any provision is unenforceable, the remainder stays in effect. Failure to enforce a
               provision is not a waiver. You may not assign these Terms without our consent; we may
               assign them in connection with a merger or asset sale. These Terms constitute the entire
-              agreement between you and ADHD Capital regarding use of the public site (but do not
+              agreement between you and Efimov Capital regarding use of the public site (but do not
               supersede a separate signed contract, if one exists).
             </p>
 
             <h3>14. Contact</h3>
             <p>
-              Legal notices: <a href="mailto:support@adhdcapital.xyz">support@adhdcapital.xyz</a>.
+              Legal notices: <a href="mailto:support@efimov.xyz">support@efimov.xyz</a>.
             </p>
           </section>
 

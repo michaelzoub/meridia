@@ -8,9 +8,9 @@ import { getWritingPosts } from "@/lib/writing/queries";
 import { SOCIAL_X_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Writing | ADHD Capital",
+  title: "Writing | Efimov Capital",
   description:
-    "Essays, memos, and notes from the ADHD Capital research desk—crypto, fintech, deep tech, and anything in between.",
+    "Essays, memos, and notes from the Efimov Capital research desk—crypto, fintech, deep tech, and anything in between.",
 };
 
 /** Always render on the server so database-backed content is included in the HTML payload. */
@@ -42,7 +42,7 @@ export default async function WritingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  @CapitalADHD
+                  @efimovcapital
                 </a>{" "}
                 for updates.
               </li>

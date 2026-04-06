@@ -5,7 +5,6 @@ import { AtAGlanceFloatingPaths } from "@/components/backgrounds/FloatingPaths";
 import PixelBlast from "@/components/backgrounds/PixelBlast";
 import PixelHammer from "@/components/backgrounds/PixelHammer";
 import PixelMountain from "@/components/backgrounds/PixelMountain";
-import PixelNuclear from "@/components/backgrounds/PixelNuclear";
 import Threads from "@/components/backgrounds/Threads";
 import { TopographyBackground } from "@/components/backgrounds/TopographyBackground";
 import { Footer } from "@/components/Footer";
@@ -77,18 +76,9 @@ const focusSteps = [
   },
 ];
 
-const teamBgs = [PixelNuclear, PixelMountain, PixelHammer] as const;
+const teamBgs = [PixelMountain, PixelHammer] as const;
 
 const team = [
-  {
-    handle: "Gemchanger",
-    image: "/gemchange_jojo.png",
-    role: "Research & markets",
-    city: "Barcelona",
-    xUrl: "https://x.com/gemchange_ltd",
-    blurb:
-      "Finance graduate with energy-sector experience in oil, plus time in venture. Covers how markets, liquidity, and narratives meet institutional reality.",
-  },
   {
     handle: "Feuter",
     image: "/feuter.jpg",
@@ -238,7 +228,7 @@ export default function Home() {
                     <HeroColumnStagger className="min-w-0 flex-1">
                       <HeroLineItem>
                         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-600">
-                          @CapitalADHD · Research collective
+                          @efimovcapital · Research collective
                         </p>
                       </HeroLineItem>
                       <HeroLineItem className="mt-5">
@@ -342,7 +332,7 @@ export default function Home() {
                   <div className="pointer-events-none absolute inset-0" aria-hidden>
                     <PixelBlast
                       variant="square"
-                      pixelSize={4}
+                      pixelSize={2}
                       color="#cffafe"
                       patternScale={2}
                       patternDensity={1}
@@ -365,10 +355,10 @@ export default function Home() {
                       One research bar
                     </p>
                     <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-900/80">
-                      Three seats · one standard
+                      Two seats · one standard
                     </p>
                     <p className="mt-4 font-serif-display text-sm leading-relaxed text-zinc-600">
-                      Three seats covering markets, systems, and publishing—one standard of rigor,
+                      Two seats covering analytics and technical systems—one standard of rigor,
                       no siloed "opinions without work product."
                     </p>
                   </div>
@@ -387,11 +377,10 @@ export default function Home() {
                     </p>
                     <p className="mt-4 font-sans text-2xl font-semibold tracking-tight text-zinc-900 md:text-3xl">
                       Singapore <span className="text-zinc-500">×1</span> · NYC{" "}
-                      <span className="text-zinc-500">×1</span> · Barcelona{" "}
                       <span className="text-zinc-500">×1</span>
                     </p>
                     <p className="mt-4 font-serif-display text-sm leading-relaxed text-zinc-600">
-                      Built across Asia, North America, and Europe—remote-first review cycles with on-site
+                      Built across Asia and North America—remote-first review cycles with on-site
                       time when hardware or lab work demands it.
                     </p>
                   </div>
@@ -436,7 +425,7 @@ export default function Home() {
                     Research thesis
                   </p>
                   <h2 className="font-sans text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
-                    ADHD{" "}
+                    Efimov{" "}
                     <span className="bg-[var(--gradient-brand)] bg-clip-text text-transparent">
                       Capital
                     </span>
@@ -461,7 +450,7 @@ export default function Home() {
                     <Tag href="/writing">Thesis</Tag>
                     <Tag
                       showArrow
-                      href="mailto:hello@adhdcapital.xyz?subject=Memo%20request%20%E2%80%94%20ADHD%20Capital"
+                      href="mailto:hello@efimov.xyz?subject=Memo%20request%20%E2%80%94%20ADHD%20Capital"
                     >
                       Request memo
                     </Tag>
@@ -478,13 +467,13 @@ export default function Home() {
             <Container>
               <SectionLabel>Team</SectionLabel>
               <h2 className="max-w-2xl font-sans text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
-                Three seats.{" "}
+                Two seats.{" "}
                 <span className="font-semibold text-cyan-800">One research bar</span>.
               </h2>
               <p className="mt-3 max-w-2xl font-serif-display text-sm leading-relaxed text-zinc-600 md:text-base">
                 The people behind the desk—operators and researchers who publish before they pitch.
               </p>
-              <StaggerOnView className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
+              <StaggerOnView className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
                 {team.map((member, i) => {
                   const CardBg = teamBgs[i];
                   return (
@@ -561,7 +550,7 @@ export default function Home() {
                 >
                   Message on X
                 </Button>
-                <Button href="mailto:hello@adhdcapital.xyz" variant="secondary">
+                <Button href="mailto:hello@efimov.xyz" variant="secondary">
                   Email us
                 </Button>
               </div>

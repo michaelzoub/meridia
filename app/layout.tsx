@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     apple: [{ url: "/icon.png", type: "image/png" }],
   },
   title:
-    "ADHD Capital | Research firm — crypto, fintech, deep tech, and anything in between",
+    "Efimov Capital | Research firm — crypto, fintech, deep tech, and anything in between",
   description:
-    "ADHD Capital is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
+    "Efimov Capital is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "ADHD Capital",
-    title: "ADHD Capital",
+    siteName: "Efimov Capital",
+    title: "Efimov Capital",
     description:
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: [
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
         url: "/adhd_banner.png",
         width: 1600,
         height: 529,
-        alt: "ADHD Capital — research firm",
+        alt: "Efimov Capital — research firm",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ADHD Capital",
+    title: "Efimov Capital",
     description:
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: ["/adhd_banner.png"],

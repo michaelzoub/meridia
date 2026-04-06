@@ -23,15 +23,15 @@ export function Header() {
         <Container className="relative flex h-14 min-w-0 items-center gap-3 md:h-16 md:gap-4">
           <Link
             href="/"
-            className="relative z-[2] flex min-w-0 max-w-[min(68%,220px)] shrink items-center outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-cyan)] md:max-w-none"
-            aria-label="ADHD Capital home"
+            className="relative z-[2] flex h-full items-center outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-cyan)]"
+            aria-label="Efimov Capital home"
           >
             <Image
-              src="/adhd_logo-nobg.png"
+              src="/efimov1logoturq.png"
               alt=""
-              width={220}
-              height={55}
-              className="h-10 w-auto max-w-full drop-shadow-[0_1px_2px_rgba(0,0,0,0.08)] md:h-11"
+              width={400}
+              height={64}
+              className="h-full w-auto object-contain"
               priority
             />
           </Link>

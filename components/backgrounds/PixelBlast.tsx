@@ -71,11 +71,10 @@ export default function PixelBlast({
     const startTime = performance.now();
     const rgb = hexToRgb(color);
 
-    // Three circles — one per founder, in a gentle triangle arrangement
+    // Two circles — one per founder
     const circles = [
-      { x: 0.22, y: 0.62, r: 0.28 },
-      { x: 0.5, y: 0.48, r: 0.28 },
-      { x: 0.78, y: 0.62, r: 0.28 },
+      { x: 0.33, y: 0.55, r: 0.28 },
+      { x: 0.67, y: 0.55, r: 0.28 },
     ];
 
     const resize = () => {

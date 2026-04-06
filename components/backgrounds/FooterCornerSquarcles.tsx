@@ -9,10 +9,16 @@ export type FooterCornerSquarclesProps = {
   className?: string;
 };
 
-/** Rounded rect path (concentric “squarcles”). */
-function roundedRectPath(x: number, y: number, width: number, height: number, radius: number): string {
-  const r = Math.min(radius, width / 2, height / 2);
-  return `M ${x + r} ${y} h ${width - 2 * r} a ${r} ${r} 0 0 1 ${r} ${r} v ${height - 2 * r} a ${r} ${r} 0 0 1 ${-r} ${r} h ${-(width - 2 * r)} a ${r} ${r} 0 0 1 ${-r} ${-r} v ${-(height - 2 * r)} a ${r} ${r} 0 0 1 ${r} ${-r} z`;
+/** Equilateral triangle path centered at (cx, cy) with circumradius R, pointing up. */
+function trianglePath(cx: number, cy: number, R: number): string {
+  const sq3_2 = Math.sqrt(3) / 2;
+  const x1 = cx;
+  const y1 = cy - R;
+  const x2 = cx + R * sq3_2;
+  const y2 = cy + R / 2;
+  const x3 = cx - R * sq3_2;
+  const y3 = cy + R / 2;
+  return `M ${x1.toFixed(2)} ${y1.toFixed(2)} L ${x2.toFixed(2)} ${y2.toFixed(2)} L ${x3.toFixed(2)} ${y3.toFixed(2)} Z`;
 }
 
 type Layer = { d: string; sw: number; times: number[]; pathLength: number[] };
@@ -21,7 +27,6 @@ const LAYER_COUNT = 10;
 const INWARD_FR = 0.42;
 const HOLD_FR = 0.06;
 const OUTWARD_FR = 0.42;
-// Remaining ~0.1 for tail at 0
 
 function buildLayerKeyframes(i: number): { times: number[]; pathLength: number[] } {
   const tIn0 = (i / LAYER_COUNT) * INWARD_FR;
@@ -37,19 +42,15 @@ function buildLayerKeyframes(i: number): { times: number[]; pathLength: number[]
   };
 }
 
-/** Concentric squarcles — outer → center draw, hold, center → outer erase, loop. Flat gray strokes, no glow. */
+/** Concentric triangles — outer → center draw, hold, center → outer erase, loop. Flat gray strokes, no glow. */
 export const FooterCornerSquarcles = React.memo(({ className }: FooterCornerSquarclesProps) => {
   const layers = React.useMemo<Layer[]>(() => {
     const cx = 268;
     const cy = 278;
     const out: Layer[] = [];
     for (let i = 0; i < LAYER_COUNT; i++) {
-      const w = 420 - i * 36;
-      const h = 384 - i * 32;
-      const ox = cx - w / 2;
-      const oy = cy - h / 2;
-      const r = Math.max(14, 56 - i * 4.2);
-      const d = roundedRectPath(ox, oy, w, h, r);
+      const R = 210 - i * 19;
+      const d = trianglePath(cx, cy, R);
       const { times, pathLength } = buildLayerKeyframes(i);
       out.push({
         d,
@@ -79,10 +80,6 @@ export const FooterCornerSquarcles = React.memo(({ className }: FooterCornerSqua
         }}
       />
 
-      {/*
-        Center of the squarcle stack sits on the container’s top-right corner:
-        translate(50%, -50%) clips ~half the pattern past top + right (matches mobile ref).
-      */}
       <div className="absolute right-0 top-0 size-[min(118vw,620px)] max-md:size-[min(125vw,640px)] translate-x-1/2 -translate-y-1/2 md:size-[min(110vw,600px)]">
         <svg
           className="h-full w-full"

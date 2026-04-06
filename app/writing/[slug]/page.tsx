@@ -15,10 +15,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getWritingPostBySlug(slug);
   if (!post) {
-    return { title: "Not found | ADHD Capital" };
+    return { title: "Not found | Efimov Capital" };
   }
   return {
-    title: `${post.title} | ADHD Capital`,
+    title: `${post.title} | Efimov Capital`,
     description: post.excerpt,
   };
 }
