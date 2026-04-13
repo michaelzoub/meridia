@@ -24,7 +24,7 @@ export function Header() {
           <Link
             href="/"
             className="relative z-[2] flex h-full items-center outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-cyan)]"
-            aria-label="Efimov Capital home"
+            aria-label="Meridia home"
           >
             <Image
               src="/efimov1logoturq.png"

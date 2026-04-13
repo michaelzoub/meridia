@@ -4,9 +4,16 @@ import { motion } from "motion/react";
 import { useMemo } from "react";
 
 /** Sky-300 — reads as a light blue line on white when strokeOpacity is low. */
-const STROKE = "#7dd3fc";
+const DEFAULT_STROKE = "#7dd3fc";
 
-function FloatingPaths({ position }: { position: 1 | -1 }) {
+function FloatingPaths({
+  position,
+  stroke = DEFAULT_STROKE,
+}: {
+  position: 1 | -1;
+  /** Override line color (e.g. warm terracotta for alternate themes). */
+  stroke?: string;
+}) {
   const paths = useMemo(
     () =>
       Array.from({ length: 28 }, (_, i) => ({
@@ -31,7 +38,7 @@ function FloatingPaths({ position }: { position: 1 | -1 }) {
         <motion.path
           key={path.id}
           d={path.d}
-          stroke={STROKE}
+          stroke={stroke}
           strokeWidth={path.width}
           strokeOpacity={path.opacity}
           initial={{ pathLength: 0.25, opacity: 0.18 }}
@@ -52,11 +59,17 @@ function FloatingPaths({ position }: { position: 1 | -1 }) {
 }
 
 /** Mirrored path sets for the “At a glance” band. */
-export function AtAGlanceFloatingPaths() {
+export function AtAGlanceFloatingPaths({
+  strokeColor,
+}: {
+  /** Optional stroke color; defaults to the cool sky line used on the main site. */
+  strokeColor?: string;
+} = {}) {
+  const stroke = strokeColor ?? DEFAULT_STROKE;
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      <FloatingPaths position={1} />
-      <FloatingPaths position={-1} />
+      <FloatingPaths position={1} stroke={stroke} />
+      <FloatingPaths position={-1} stroke={stroke} />
     </div>
   );
 }

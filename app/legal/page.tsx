@@ -8,9 +8,9 @@ import { Container, SectionLabel } from "@/components/ui";
 const EFFECTIVE_DATE = "April 1, 2026";
 
 export const metadata: Metadata = {
-  title: "Legal | Efimov Capital",
+  title: "Legal | Meridia",
   description:
-    "Privacy policy and terms of use for Efimov Capital—how we handle research, communications, and discretionary funding-related interactions.",
+    "Privacy policy and terms of use for Meridia—how we handle research, communications, and discretionary funding-related interactions.",
 };
 
 const sectionClass =
@@ -27,7 +27,7 @@ export default function LegalPage() {
             Privacy &amp; terms
           </h1>
           <p className="mt-4 max-w-2xl font-serif-display text-base leading-relaxed text-zinc-700">
-            These documents explain how Efimov Capital (&quot;Efimov Capital,&quot; &quot;we,&quot; &quot;us,&quot; or
+            These documents explain how Meridia (&quot;Meridia,&quot; &quot;we,&quot; &quot;us,&quot; or
             &quot;our&quot;) treats personal data and the rules that apply when you use our website and
             interact with our research and business-development process.
           </p>
@@ -128,8 +128,8 @@ export default function LegalPage() {
               We share personal data with subprocessors that provide hosting, email delivery, security
               monitoring, and similar infrastructure, under written agreements that require
               confidentiality and appropriate safeguards. We may disclose information if required by
-              subpoena, court order, or applicable law, or to protect the rights and safety of Efimov
-              Capital personnel or the public. We do not sell personal data as that term is defined
+              subpoena, court order, or applicable law, or to protect the rights and safety of Meridia
+              personnel or the public. We do not sell personal data as that term is defined
               under the California Consumer Privacy Act as amended by the California Privacy Rights Act
               (“CCPA/CPRA”), nor do we “share” it for cross-context behavioral advertising.
             </p>
@@ -203,7 +203,7 @@ export default function LegalPage() {
 
             <h3>2. Who we are; informational nature of content</h3>
             <p>
-              Efimov Capital is a research-led collective focused on crypto, fintech, deep tech, and
+              Meridia is a research-led collective focused on crypto, fintech, deep tech, and
               anything in between—including networks, rails, and frontier stacks. Everything on this
               site—including articles, memos, models,
               and charts—is provided for <strong className="font-medium text-zinc-800">informational and
@@ -216,7 +216,7 @@ export default function LegalPage() {
             <h3>3. No advisory or fiduciary relationship</h3>
             <p>
               Use of the site does not create a client, advisory, fiduciary, or partnership
-              relationship between you and Efimov Capital. Communications through email, social
+              relationship between you and Meridia. Communications through email, social
               channels, or meetings—including exploratory diligence—do not constitute an agreement to
               provide services unless we both execute a separate written contract that expressly says
               so.
@@ -247,7 +247,7 @@ export default function LegalPage() {
 
             <h3>6. Intellectual property</h3>
             <p>
-              Unless otherwise noted, site content is owned by Efimov Capital or its licensors and is
+              Unless otherwise noted, site content is owned by Meridia or its licensors and is
               protected by copyright and other intellectual property laws. You may view, download,
               and print reasonable portions for personal, non-commercial use, provided you keep
               attribution intact. You may not scrape the site in bulk, resell our materials, or remove
@@ -293,7 +293,7 @@ export default function LegalPage() {
 
             <h3>11. Indemnity</h3>
             <p>
-              You will indemnify and hold harmless Efimov Capital and its personnel from claims, losses,
+              You will indemnify and hold harmless Meridia and its personnel from claims, losses,
               and expenses (including reasonable attorneys’ fees) arising from your misuse of the site,
               your breach of these Terms, or your violation of law.
             </p>
@@ -305,7 +305,7 @@ export default function LegalPage() {
               to mandatory consumer protections where you reside, you consent to the exclusive
               jurisdiction of the state and federal courts located in Delaware for disputes arising
               from or relating to these Terms or the site, and waive any objection to inconvenient
-              forum, except that Efimov Capital may seek injunctive relief in any court of competent
+              forum, except that Meridia may seek injunctive relief in any court of competent
               jurisdiction.
             </p>
 
@@ -314,7 +314,7 @@ export default function LegalPage() {
               If any provision is unenforceable, the remainder stays in effect. Failure to enforce a
               provision is not a waiver. You may not assign these Terms without our consent; we may
               assign them in connection with a merger or asset sale. These Terms constitute the entire
-              agreement between you and Efimov Capital regarding use of the public site (but do not
+              agreement between you and Meridia regarding use of the public site (but do not
               supersede a separate signed contract, if one exists).
             </p>
 

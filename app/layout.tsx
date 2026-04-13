@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     apple: [{ url: "/icon.png", type: "image/png" }],
   },
   title:
-    "Efimov Capital | Research firm — crypto, fintech, deep tech, and anything in between",
+    "Meridia | Research firm — crypto, fintech, deep tech, and anything in between",
   description:
-    "Efimov Capital is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
+    "Meridia is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "Efimov Capital",
-    title: "Efimov Capital",
+    siteName: "Meridia",
+    title: "Meridia",
     description:
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: [
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
         url: "/adhd_banner.png",
         width: 1600,
         height: 529,
-        alt: "Efimov Capital — research firm",
+        alt: "Meridia — research firm",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Efimov Capital",
+    title: "Meridia",
     description:
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: ["/adhd_banner.png"],

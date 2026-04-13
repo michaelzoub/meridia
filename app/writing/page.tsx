@@ -5,12 +5,12 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Container, SectionLabel } from "@/components/ui";
 import { getWritingPosts } from "@/lib/writing/queries";
-import { SOCIAL_X_URL } from "@/lib/site";
+import { SOCIAL_X_HANDLE_DISPLAY, SOCIAL_X_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Writing | Efimov Capital",
+  title: "Writing | Meridia",
   description:
-    "Essays, memos, and notes from the Efimov Capital research desk—crypto, fintech, deep tech, and anything in between.",
+    "Essays, memos, and notes from the Meridia research desk—crypto, fintech, deep tech, and anything in between.",
 };
 
 /** Always render on the server so database-backed content is included in the HTML payload. */
@@ -42,7 +42,7 @@ export default async function WritingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  @efimovcapital
+                  {SOCIAL_X_HANDLE_DISPLAY}
                 </a>{" "}
                 for updates.
               </li>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FooterCornerSquarcles } from "@/components/backgrounds/FooterCornerSquarcles";
 import { SectionReveal } from "@/components/hero/SectionReveal";
 import { Container } from "@/components/ui";
-import { SOCIAL_X_URL } from "@/lib/site";
+import { SOCIAL_X_HANDLE_DISPLAY, SOCIAL_X_URL } from "@/lib/site";
 
 const columns = [
   {
@@ -95,21 +95,21 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="mt-4 block font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
               >
-                @efimovcapital
+                {SOCIAL_X_HANDLE_DISPLAY}
               </a>
             </div>
           </div>
 
           <div className="mt-14 border-t border-zinc-800 pt-10">
             <p className="max-w-4xl font-serif-display text-xs leading-relaxed text-zinc-500">
-              Efimov Capital publishes research and commentary for informational and educational
+              Meridia publishes research and commentary for informational and educational
               purposes only and does not provide investment advice, investment recommendations, or
               an offer or solicitation to buy or sell any security or financial instrument. Any
               investment activity is high risk; do your own diligence and consult qualified
               advisors.
             </p>
             <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-zinc-600">
-              © {new Date().getFullYear()} Efimov Capital. All rights reserved.
+              © {new Date().getFullYear()} Meridia. All rights reserved.
             </p>
           </div>
         </Container>

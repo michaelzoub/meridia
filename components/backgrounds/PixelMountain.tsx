@@ -2,7 +2,14 @@
 
 import { useEffect, useRef } from "react";
 
-export default function PixelMountain() {
+const DEFAULT_ACCENT: [number, number, number] = [103, 232, 249];
+
+export type PixelMountainProps = {
+  /** RGB stroke/fill accent (default: cyan). Use warm sand/rust on Meridia / variation1. */
+  accentRgb?: [number, number, number];
+};
+
+export default function PixelMountain({ accentRgb = DEFAULT_ACCENT }: PixelMountainProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -16,6 +23,7 @@ export default function PixelMountain() {
 
     const dpr = window.devicePixelRatio || 1;
     const startTime = performance.now();
+    const [r, g, b] = accentRgb;
 
     const resize = () => {
       const w = container.clientWidth;
@@ -79,7 +87,7 @@ export default function PixelMountain() {
           ctx.lineTo(peakX, peakY);
           ctx.lineTo(peakX + halfW, baseY);
           ctx.closePath();
-          ctx.fillStyle = "rgba(103,232,249,0.07)";
+          ctx.fillStyle = `rgba(${r},${g},${b},0.07)`;
           ctx.fill();
         }
 
@@ -87,7 +95,7 @@ export default function PixelMountain() {
         ctx.moveTo(peakX - halfW, baseY);
         ctx.lineTo(peakX, peakY);
         ctx.lineTo(peakX + halfW, baseY);
-        ctx.strokeStyle = `rgba(103,232,249,${opacity.toFixed(3)})`;
+        ctx.strokeStyle = `rgba(${r},${g},${b},${opacity.toFixed(3)})`;
         ctx.lineWidth   = (0.6 + frac * 0.8) * dpr;
         ctx.stroke();
       }
@@ -126,7 +134,7 @@ export default function PixelMountain() {
         // Alpha: 0 at tail, peaks at head
         const alpha = Math.pow(frac1, 2) * 0.65;
 
-        ctx.strokeStyle = `rgba(103,232,249,${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
         ctx.beginPath();
         ctx.moveTo(pt0.x, pt0.y);
         ctx.lineTo(pt1.x, pt1.y);
@@ -137,7 +145,7 @@ export default function PixelMountain() {
       const head = pointOnPath(headDist, p0, p1, p2, legA, total);
       ctx.beginPath();
       ctx.arc(head.x, head.y, 2.2 * dpr, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(103,232,249,0.75)";
+      ctx.fillStyle = `rgba(${r},${g},${b},0.75)`;
       ctx.fill();
     };
 
@@ -146,7 +154,7 @@ export default function PixelMountain() {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
     };
-  }, []);
+  }, [accentRgb]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">

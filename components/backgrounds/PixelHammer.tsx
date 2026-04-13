@@ -2,10 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
+const DEFAULT_ACCENT: [number, number, number] = [103, 232, 249];
+
+export type PixelHammerProps = {
+  /** RGB stroke/fill accent (default: cyan). Use warm sand/rust on Meridia / variation1. */
+  accentRgb?: [number, number, number];
+};
+
 /**
  * Nested concentric gears — all rings rotate together as one unit.
  */
-export default function PixelHammer() {
+export default function PixelHammer({ accentRgb = DEFAULT_ACCENT }: PixelHammerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -31,6 +38,8 @@ export default function PixelHammer() {
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(container);
+
+    const [r, g, b] = accentRgb;
 
     function drawGear(
       c: CanvasRenderingContext2D,
@@ -60,10 +69,10 @@ export default function PixelHammer() {
       c.closePath();
 
       if (fillAlpha > 0) {
-        c.fillStyle = `rgba(103,232,249,${fillAlpha.toFixed(3)})`;
+        c.fillStyle = `rgba(${r},${g},${b},${fillAlpha.toFixed(3)})`;
         c.fill();
       }
-      c.strokeStyle = `rgba(103,232,249,${strokeAlpha.toFixed(3)})`;
+      c.strokeStyle = `rgba(${r},${g},${b},${strokeAlpha.toFixed(3)})`;
       c.lineWidth   = lw;
       c.stroke();
     }
@@ -108,9 +117,9 @@ export default function PixelHammer() {
       // Center hub
       ctx.beginPath();
       ctx.arc(cx, cy, maxR * 0.04, 0, Math.PI * 2);
-      ctx.fillStyle   = "rgba(103,232,249,0.18)";
+      ctx.fillStyle   = `rgba(${r},${g},${b},0.18)`;
       ctx.fill();
-      ctx.strokeStyle = "rgba(103,232,249,0.26)";
+      ctx.strokeStyle = `rgba(${r},${g},${b},0.26)`;
       ctx.lineWidth   = 0.8 * dpr;
       ctx.stroke();
 
@@ -122,7 +131,7 @@ export default function PixelHammer() {
         ctx.beginPath();
         ctx.moveTo(cx + Math.cos(a) * hubR,   cy + Math.sin(a) * hubR);
         ctx.lineTo(cx + Math.cos(a) * spokeR, cy + Math.sin(a) * spokeR);
-        ctx.strokeStyle = "rgba(103,232,249,0.18)";
+        ctx.strokeStyle = `rgba(${r},${g},${b},0.18)`;
         ctx.lineWidth   = 0.8 * dpr;
         ctx.stroke();
       }
@@ -130,7 +139,7 @@ export default function PixelHammer() {
       // Boundary ring
       ctx.beginPath();
       ctx.arc(cx, cy, maxR * 1.01, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(103,232,249,0.07)";
+      ctx.strokeStyle = `rgba(${r},${g},${b},0.07)`;
       ctx.lineWidth   = 0.6 * dpr;
       ctx.stroke();
     };
@@ -140,7 +149,7 @@ export default function PixelHammer() {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
     };
-  }, []);
+  }, [accentRgb]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">

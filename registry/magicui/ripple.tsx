@@ -4,14 +4,17 @@ import * as React from "react";
 
 type RippleProps = {
   className?: string;
+  /** Warm tones use terracotta/stone rings instead of cyan. */
+  tone?: "default" | "warm";
 };
 
-export function Ripple({ className }: RippleProps) {
+export function Ripple({ className, tone = "default" }: RippleProps) {
+  const warm = tone === "warm";
   return (
     <div className={["absolute inset-0", className].filter(Boolean).join(" ")}>
       <div className="ripple-layer" />
-      <div className="ripple-layer ripple-layer--2" />
-      <div className="ripple-layer ripple-layer--3" />
+      <div className={`ripple-layer ripple-layer--2 ${warm ? "ripple-layer--warm2" : ""}`} />
+      <div className={`ripple-layer ripple-layer--3 ${warm ? "ripple-layer--warm3" : ""}`} />
       <style jsx>{`
         .ripple-layer {
           position: absolute;
@@ -34,6 +37,14 @@ export function Ripple({ className }: RippleProps) {
         .ripple-layer--3 {
           animation-delay: 1.7s;
           border-color: rgba(8, 145, 178, 0.18);
+        }
+
+        .ripple-layer--warm2 {
+          border-color: rgba(180, 83, 9, 0.22);
+        }
+
+        .ripple-layer--warm3 {
+          border-color: rgba(120, 53, 15, 0.16);
         }
 
         @keyframes ripple {

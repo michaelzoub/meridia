@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 
 export type BackgroundBeamsProps = {
   className?: string;
+  /** Warm terracotta strokes for Meridia / variation1 dark panels. Default: neutral zinc/white. */
+  tone?: "neutral" | "terracotta";
 };
 
 const pathData = [
@@ -37,8 +39,11 @@ const animations = pathData.map((_, i) => ({
   delay: i * 0.15,
 }));
 
-/** Animated beam paths — neutral zinc/white strokes for dark surfaces (no purple/teal). */
-export const BackgroundBeams = React.memo(({ className }: BackgroundBeamsProps) => {
+/** Animated beam paths — neutral zinc/white or warm terracotta (dark surfaces; no purple/teal). */
+export const BackgroundBeams = React.memo(({ className, tone = "neutral" }: BackgroundBeamsProps) => {
+  const idPrefix = tone === "terracotta" ? "beam-t" : "beam-n";
+  const staticStroke = tone === "terracotta" ? "rgba(212, 165, 116, 0.14)" : "white";
+
   return (
     <div className={cn("pointer-events-none absolute inset-0 h-full w-full overflow-hidden", className)}>
       <svg
@@ -49,17 +54,17 @@ export const BackgroundBeams = React.memo(({ className }: BackgroundBeamsProps) 
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid slice"
       >
-        <g opacity="0.06">
+        <g opacity={tone === "terracotta" ? 0.09 : 0.06}>
           {pathData.map((d, i) => (
-            <path key={`static-${i}`} d={d} stroke="white" strokeWidth="0.5" />
+            <path key={`static-${idPrefix}-${i}`} d={d} stroke={staticStroke} strokeWidth="0.5" />
           ))}
         </g>
 
         {pathData.map((d, i) => (
           <motion.path
-            key={`beam-${i}`}
+            key={`beam-${idPrefix}-${i}`}
             d={d}
-            stroke={`url(#beam-gradient-${i})`}
+            stroke={`url(#${idPrefix}-gradient-${i})`}
             strokeWidth="0.85"
             strokeLinecap="round"
             initial={{ pathLength: 0, opacity: 0 }}
@@ -79,18 +84,30 @@ export const BackgroundBeams = React.memo(({ className }: BackgroundBeamsProps) 
         <defs>
         {pathData.map((_, i) => (
           <linearGradient
-            key={`beam-gradient-def-${i}`}
-            id={`beam-gradient-${i}`}
+            key={`beam-gradient-def-${idPrefix}-${i}`}
+            id={`${idPrefix}-gradient-${i}`}
             x1="0%"
             y1="0%"
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stopColor="#fafafa" stopOpacity="0" />
-            <stop offset="25%" stopColor="#e4e4e7" stopOpacity="0.85" />
-            <stop offset="50%" stopColor="#ffffff" stopOpacity="0.55" />
-            <stop offset="75%" stopColor="#d4d4d8" stopOpacity="0.65" />
-            <stop offset="100%" stopColor="#fafafa" stopOpacity="0" />
+            {tone === "terracotta" ? (
+              <>
+                <stop offset="0%" stopColor="#7c2d12" stopOpacity="0" />
+                <stop offset="22%" stopColor="#c4713f" stopOpacity="0.55" />
+                <stop offset="48%" stopColor="#e8b896" stopOpacity="0.45" />
+                <stop offset="72%" stopColor="#b45309" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#7c2d12" stopOpacity="0" />
+              </>
+            ) : (
+              <>
+                <stop offset="0%" stopColor="#fafafa" stopOpacity="0" />
+                <stop offset="25%" stopColor="#e4e4e7" stopOpacity="0.85" />
+                <stop offset="50%" stopColor="#ffffff" stopOpacity="0.55" />
+                <stop offset="75%" stopColor="#d4d4d8" stopOpacity="0.65" />
+                <stop offset="100%" stopColor="#fafafa" stopOpacity="0" />
+              </>
+            )}
           </linearGradient>
         ))}
       </defs>

@@ -228,7 +228,7 @@ export default function Home() {
                     <HeroColumnStagger className="min-w-0 flex-1">
                       <HeroLineItem>
                         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-600">
-                          @efimovcapital · Research collective
+                          Meridia · Research collective
                         </p>
                       </HeroLineItem>
                       <HeroLineItem className="mt-5">
@@ -425,9 +425,8 @@ export default function Home() {
                     Research thesis
                   </p>
                   <h2 className="font-sans text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
-                    Efimov{" "}
                     <span className="bg-[var(--gradient-brand)] bg-clip-text text-transparent">
-                      Capital
+                      Meridia
                     </span>
                   </h2>
                   <p className="mt-4 font-serif-display text-base leading-relaxed text-zinc-800">
@@ -450,7 +449,7 @@ export default function Home() {
                     <Tag href="/writing">Thesis</Tag>
                     <Tag
                       showArrow
-                      href="mailto:hello@efimov.xyz?subject=Memo%20request%20%E2%80%94%20ADHD%20Capital"
+                      href="mailto:hello@efimov.xyz?subject=Memo%20request%20%E2%80%94%20Meridia"
                     >
                       Request memo
                     </Tag>
