@@ -462,7 +462,7 @@ export default function Variation5Page() {
                   {/* Open methodology */}
                   <div className="relative overflow-hidden border p-6" style={{ borderColor: RULE, background: WHITE }}>
                     <div className="pointer-events-none absolute inset-0" aria-hidden>
-                      <OpenNetworkAnimation color="#111111" opacity={0.09} nodeCount={11} />
+                      <OpenNetworkAnimation color="#111111" opacity={0.09} />
                     </div>
                     <div className="relative">
                       <p
