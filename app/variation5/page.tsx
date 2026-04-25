@@ -4,6 +4,8 @@ import Image from "next/image";
 import { AuroraBackground } from "@/components/backgrounds/AuroraBackground";
 import { AtAGlanceFloatingPaths } from "@/components/backgrounds/FloatingPaths";
 import GameOfLife from "@/components/backgrounds/GameOfLife";
+import OpenNetworkAnimation from "@/components/backgrounds/OpenNetworkAnimation";
+import TreeAnimation from "@/components/backgrounds/TreeAnimation";
 import PixelBlast from "@/components/backgrounds/PixelBlast";
 import PixelHammer from "@/components/backgrounds/PixelHammer";
 import PixelMountain from "@/components/backgrounds/PixelMountain";
@@ -426,7 +428,7 @@ export default function Variation5Page() {
           >
             {/* Conway's Game of Life — dark cells on white, very subtle */}
             <div className="pointer-events-none absolute inset-0" aria-hidden>
-              <GameOfLife cellSize={3} color="#111111" speed={700} opacity={0.015} density={0.12} />
+              <GameOfLife cellSize={4} color="#111111" speed={650} opacity={0.028} density={0.14} />
             </div>
             <Container>
               <div className="mx-auto max-w-4xl">
@@ -458,41 +460,51 @@ export default function Variation5Page() {
                 {/* Three method pillars — agent-assisted card has FlickeringGrid */}
                 <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
                   {/* Open methodology */}
-                  <div className="border p-6" style={{ borderColor: RULE }}>
-                    <p
-                      className="font-sans font-semibold text-sm"
-                      style={{ color: INK }}
-                    >
-                      Open methodology
-                    </p>
-                    <p
-                      className="mt-2 font-serif-display text-sm leading-relaxed"
-                      style={{ color: MUTED }}
-                    >
-                      Sources cited. Steps reproducible. No black box.
-                    </p>
+                  <div className="relative overflow-hidden border p-6" style={{ borderColor: RULE, background: WHITE }}>
+                    <div className="pointer-events-none absolute inset-0" aria-hidden>
+                      <OpenNetworkAnimation color="#111111" opacity={0.09} nodeCount={11} />
+                    </div>
+                    <div className="relative">
+                      <p
+                        className="font-sans font-semibold text-sm"
+                        style={{ color: INK }}
+                      >
+                        Open methodology
+                      </p>
+                      <p
+                        className="mt-2 font-serif-display text-sm leading-relaxed"
+                        style={{ color: MUTED }}
+                      >
+                        Sources cited. Steps reproducible. No black box.
+                      </p>
+                    </div>
                   </div>
 
                   {/* Adversarial review */}
-                  <div className="border p-6" style={{ borderColor: RULE }}>
-                    <p
-                      className="font-sans font-semibold text-sm"
-                      style={{ color: INK }}
-                    >
-                      Adversarial review
-                    </p>
-                    <p
-                      className="mt-2 font-serif-display text-sm leading-relaxed"
-                      style={{ color: MUTED }}
-                    >
-                      Uncomfortable questions go in the appendix.
-                    </p>
+                  <div className="relative overflow-hidden border p-6" style={{ borderColor: RULE, background: WHITE }}>
+                    <div className="pointer-events-none absolute inset-0" aria-hidden>
+                      <TreeAnimation color="#111111" opacity={0.12} />
+                    </div>
+                    <div className="relative">
+                      <p
+                        className="font-sans font-semibold text-sm"
+                        style={{ color: INK }}
+                      >
+                        Adversarial review
+                      </p>
+                      <p
+                        className="mt-2 font-serif-display text-sm leading-relaxed"
+                        style={{ color: MUTED }}
+                      >
+                        Uncomfortable questions go in the appendix.
+                      </p>
+                    </div>
                   </div>
 
                   {/* Agent-assisted — FlickeringGrid background signals the AI/computational character */}
                   <div
                     className="relative overflow-hidden border p-6"
-                    style={{ borderColor: RULE }}
+                    style={{ borderColor: RULE, background: WHITE }}
                   >
                     <div
                       className="pointer-events-none absolute inset-0"

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { MobileNav } from "@/components/MobileNav";
@@ -24,16 +23,14 @@ export function Header() {
           <Link
             href="/"
             className="relative z-[2] flex h-full items-center outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-cyan)]"
-            aria-label="Meridia home"
+            aria-label="Caliga home"
           >
-            <Image
-              src="/efimov1logoturq.png"
-              alt=""
-              width={400}
-              height={64}
-              className="h-full w-auto object-contain"
-              priority
-            />
+            <span
+              className="font-serif-display italic tracking-tight leading-none select-none"
+              style={{ fontSize: "1.75rem", color: "#c47a30" }}
+            >
+              Caliga
+            </span>
           </Link>
           <nav
             className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex"

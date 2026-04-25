@@ -71,67 +71,71 @@ export function Footer() {
               </div>
             </div>
 
-            {/* ── Right: nav grid + contact ── */}
-            <div className="flex flex-col gap-10 lg:items-end">
-              <div className="grid grid-cols-3 gap-8 md:gap-10">
-                {columns.map((col) => (
-                  <div key={col.title}>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
-                      {col.title}
-                    </p>
-                    <nav className="mt-4 space-y-2" aria-label={col.title}>
-                      {col.links.map((l) => {
-                        const cls =
-                          "block font-sans text-sm font-medium text-zinc-100 transition-colors hover:text-white";
+            {/* ── Right: nav grid 2×2 + contact in second row ── */}
+            <div className="grid grid-cols-2 gap-x-10 gap-y-10">
+              {columns.map((col) => (
+                <div key={col.title}>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                    {col.title}
+                  </p>
+                  <nav className="mt-4 space-y-2" aria-label={col.title}>
+                    {col.links.map((l) => {
+                      const cls =
+                        "block font-sans text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-300";
 
-                        if ("disabled" in l && l.disabled) {
-                          return (
-                            <span key={l.label} className="block font-sans text-sm text-zinc-600">
-                              {l.label}
-                            </span>
-                          );
-                        }
-
-                        if ("external" in l && l.external) {
-                          return (
-                            <a
-                              key={l.label}
-                              href={l.href}
-                              className={cls}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {l.label}
-                            </a>
-                          );
-                        }
-
+                      if ("disabled" in l && l.disabled) {
                         return (
-                          <Link key={l.label} href={l.href} className={cls}>
+                          <span key={l.label} className="block font-sans text-sm text-zinc-600">
                             {l.label}
-                          </Link>
+                          </span>
                         );
-                      })}
-                    </nav>
-                  </div>
-                ))}
-              </div>
+                      }
 
-              <div className="flex flex-col gap-2 lg:text-right">
-                <a
-                  href="mailto:hello@caliga.xyz"
-                  className="font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
-                >
-                  hello@caliga.xyz
-                </a>
-                <a
-                  href={SOCIAL_X_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-sm font-semibold text-white underline decoration-zinc-600 underline-offset-4 transition-colors hover:decoration-zinc-400"
-                >
-                  {SOCIAL_X_HANDLE_DISPLAY}
-                </a>
+                      if ("external" in l && l.external) {
+                        return (
+                          <a
+                            key={l.label}
+                            href={l.href}
+                            className={cls}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {l.label}
+                          </a>
+                        );
+                      }
+
+                      return (
+                        <Link key={l.label} href={l.href} className={cls}>
+                          {l.label}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </div>
+              ))}
+
+              {/* Contact — 4th column, same vertical alignment as nav */}
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                  Contact —
+                </p>
+                <div className="mt-4 space-y-2">
+                  <a
+                    href="mailto:hello@caliga.xyz"
+                    className="block font-sans text-sm font-medium text-zinc-500 underline decoration-zinc-700 underline-offset-4 transition-colors hover:text-zinc-300 hover:decoration-zinc-500"
+                  >
+                    hello@caliga.xyz
+                  </a>
+                  <a
+                    href={SOCIAL_X_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block font-sans text-sm font-medium text-zinc-500 underline decoration-zinc-700 underline-offset-4 transition-colors hover:text-zinc-300 hover:decoration-zinc-500"
+                  >
+                    {SOCIAL_X_HANDLE_DISPLAY}
+                  </a>
+                </div>
               </div>
             </div>
 
