@@ -1,36 +1,65 @@
 import "server-only";
+import { createAnonClient } from "@/lib/supabase";
 
 export type WritingPost = {
+  id: string;
   slug: string;
   title: string;
+  subtitle: string | null;
+  /** Same as subtitle — kept for backwards compat with existing writing page */
   excerpt: string;
-  /** ISO 8601 date string */
+  content: string;
+  /** Formatted date string for display */
   publishedAt: string;
 };
 
-/** Seed data until a database is wired in (`getWritingPosts` stays the single call site). */
-const seedPosts: WritingPost[] = [
-  {
-    slug: "example-frontier-diligence",
-    title: "Frontier markets and priced risk",
-    excerpt:
-      "How we think about which risks are in the tape—and which only surface after mainnet.",
-    publishedAt: "2026-03-12",
-  },
-];
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 
-/**
- * Server-side data access. The Writing page is an async Server Component that awaits this
- * function, so the first HTML response already includes the list—no client-side fetch waterfall.
- *
- * Swap the body for your database client, for example:
- * `return db.select().from(writing).orderBy(desc(writing.publishedAt))`
- */
 export async function getWritingPosts(): Promise<WritingPost[]> {
-  return [...seedPosts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  const supabase = createAnonClient();
+  const { data } = await supabase
+    .from("articles")
+    .select("id, title, subtitle, slug, published_at, content")
+    .not("published_at", "is", null)
+    .order("published_at", { ascending: false });
+
+  if (!data) return [];
+
+  return data.map((row) => ({
+    id: row.id as string,
+    slug: row.slug as string,
+    title: row.title as string,
+    subtitle: (row.subtitle as string | null) ?? null,
+    excerpt: (row.subtitle as string) ?? "",
+    content: (row.content as string) ?? "",
+    publishedAt: formatDate(row.published_at as string),
+  }));
 }
 
 export async function getWritingPostBySlug(slug: string): Promise<WritingPost | null> {
-  const post = seedPosts.find((p) => p.slug === slug);
-  return post ?? null;
+  const supabase = createAnonClient();
+  const { data } = await supabase
+    .from("articles")
+    .select("id, title, subtitle, slug, published_at, content")
+    .eq("slug", slug)
+    .not("published_at", "is", null)
+    .maybeSingle();
+
+  if (!data) return null;
+
+  return {
+    id: data.id as string,
+    slug: data.slug as string,
+    title: data.title as string,
+    subtitle: (data.subtitle as string | null) ?? null,
+    excerpt: (data.subtitle as string) ?? "",
+    content: (data.content as string) ?? "",
+    publishedAt: formatDate(data.published_at as string),
+  };
 }

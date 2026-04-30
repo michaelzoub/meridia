@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { Container, SectionLabel } from "@/components/ui";
+import { Container } from "@/components/ui";
 import { getWritingPostBySlug } from "@/lib/writing/queries";
 
 export const dynamic = "force-dynamic";
@@ -41,17 +41,18 @@ export default async function WritingPostPage({ params }: Props) {
           <h1 className="mt-3 max-w-3xl font-sans text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
             {post.title}
           </h1>
-          <p className="mt-6 max-w-2xl font-serif-display text-lg leading-relaxed text-zinc-700">
-            {post.excerpt}
-          </p>
-          <div className="mt-14">
-            <SectionLabel>Coming soon</SectionLabel>
-          </div>
-          <p className="mt-2 max-w-xl font-serif-display text-sm leading-relaxed text-zinc-600">
-            Full article body will load from the same server data source once your CMS or database
-            stores long-form content. This page is already server-rendered with the post metadata.
-          </p>
-          <p className="mt-8">
+          {post.subtitle && (
+            <p className="mt-4 max-w-2xl font-serif-display text-lg leading-relaxed text-zinc-700">
+              {post.subtitle}
+            </p>
+          )}
+
+          <div
+            className="prose prose-zinc prose-lg mt-14 max-w-3xl"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+
+          <p className="mt-14">
             <Link
               href="/writing"
               className="font-mono text-[11px] uppercase tracking-[0.16em] text-cyan-800 transition-colors hover:text-cyan-950"
