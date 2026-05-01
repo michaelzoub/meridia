@@ -4,6 +4,15 @@ import type { NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Block variation pages in production
+  if (
+    process.env.NODE_ENV === "production" &&
+    /^\/variation\d/.test(pathname)
+  ) {
+    return NextResponse.rewrite(new URL("/404", request.url));
+  }
+
+  // Dashboard auth
   if (pathname === "/dashboard/login") {
     return NextResponse.next();
   }
@@ -17,5 +26,13 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/dashboard/:path*"],
+  matcher: [
+    "/dashboard",
+    "/dashboard/:path*",
+    "/variation1",
+    "/variation2",
+    "/variation3",
+    "/variation4",
+    "/variation5",
+  ],
 };

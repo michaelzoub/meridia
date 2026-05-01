@@ -26,8 +26,8 @@ import { StaggerItem, StaggerOnView } from "@/components/hero/StaggerOnView";
 import { Container } from "@/components/ui";
 import { SOCIAL_X_URL } from "@/lib/site";
 
-// ── Palette ──────────────────────────────────────────────────────────────────
-const HERO_BG = "#f5f4f0"; // matches TopographyBackground fill
+// ── Palette ───────────────────────────────────────────────────────────────────
+const HERO_BG = "#f5f4f0";
 const WHITE = "#ffffff";
 const INK = "#111111";
 const DARK_SECTION = "#0e0e0e";
@@ -35,15 +35,6 @@ const RULE = "#e0dcd8";
 const MUTED = "#8a8680";
 const DIM = "#b8b4b0";
 const AMBER = "#c47a30";
-
-// ── Font helpers (matching homepage font conventions) ─────────────────────────
-// Inline mixing of Instrument Serif italic + Geist Sans semibold — same technique
-// as homepage: `font-serif-display text-[1.05em] font-semibold italic`.
-function Serif({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="font-serif-display font-semibold italic">{children}</span>
-  );
-}
 
 function Faded({ children }: { children: React.ReactNode }) {
   return <span style={{ color: DIM }}>{children}</span>;
@@ -53,13 +44,12 @@ function Accent({ children }: { children: React.ReactNode }) {
   return <span style={{ color: AMBER }}>{children}</span>;
 }
 
-// ── Data ─────────────────────────────────────────────────────────────────────
+// ── Data ──────────────────────────────────────────────────────────────────────
 const researchAreas = [
   {
     label: "Crypto & protocols",
     sub: "L1/L2 · DeFi · Custody",
-    body: "Protocol economics, security assumptions, on-chain metrics, and the adversarial edge cases that standard diligence misses.",
-    // PixelBlast (cyan) — same palette used on homepage "Collective" card
+    body: "Protocol economics, security assumptions, on-chain metrics, and the edge cases that standard diligence tends to miss.",
     bg: (
       <PixelBlast
         variant="square"
@@ -82,8 +72,7 @@ const researchAreas = [
   {
     label: "Fintech rails",
     sub: "Payments · Wallets · Settlement",
-    body: "Cross-border infrastructure, wallet stacks, regulatory surface area—traced at the implementation level.",
-    // PixelBlast (warm amber) — distinct from cyan card
+    body: "Cross-border infrastructure, wallet stacks, and regulatory surface area, reviewed at the implementation level.",
     bg: (
       <PixelBlast
         variant="square"
@@ -106,8 +95,7 @@ const researchAreas = [
   {
     label: "Frontier AI",
     sub: "Agents · Compute · Inference",
-    body: "Agent pipelines, inference hardware, emerging compute paradigms. We stress-test architecture—not just the demo.",
-    // FlickeringGrid — signals the "AI" / computational character
+    body: "Agent pipelines, inference hardware, and emerging compute paradigms. We evaluate architecture, not just the demo.",
     bg: (
       <FlickeringGrid
         className="absolute inset-0 h-full w-full"
@@ -121,9 +109,8 @@ const researchAreas = [
   },
   {
     label: "Robotics & deep tech",
-    sub: "Hardware–software · Sensors",
-    body: "Embedded systems, physical-digital interfaces, and the hardware layers adjacent to financial infrastructure.",
-    // Threads — flowing, organic feel for hardware/physical layer
+    sub: "Hardware-software · Sensors",
+    body: "Embedded systems, physical-digital interfaces, and hardware layers adjacent to financial infrastructure.",
     bg: (
       <Threads
         color={[0.77, 0.6, 0.38]}
@@ -143,7 +130,7 @@ const team = [
     city: "Singapore",
     xUrl: "https://x.com/feuters",
     blurb:
-      "Graduate training with VC exposure—deep on analytics, modelling, and company analysis. Former owner of a contracting business; brings operator judgment to diligence.",
+      "Graduate training with VC exposure, specializing in analytics, financial modeling, and company analysis. Former operator with direct experience building and running a business.",
     Bg: PixelMountain,
   },
   {
@@ -153,15 +140,15 @@ const team = [
     city: "NYC",
     xUrl: "https://x.com/wenkafka",
     blurb:
-      "Computer science background; hands-on engineering with projects spanning YC- and Paradigm-style stacks. Codes, reviews, and stress-tests assumptions.",
+      "Computer science background with hands-on engineering experience across multiple startup stacks. Evaluates architecture, crafts automations and reviews implementation directly.",
     Bg: PixelHammer,
   },
 ];
 
 export const metadata: Metadata = {
-  title: "Caliga — Research before the revolution is obvious",
+  title: "Caliga — Primary research on frontier technology",
   description:
-    "A research collective for the technology that changes everything. Caliga covers crypto, fintech, deep tech, and frontier AI.",
+    "A two-person research collective covering crypto, fintech, deep tech, and frontier AI.",
   robots: { index: false, follow: true },
 };
 
@@ -170,10 +157,9 @@ export default function Variation5Page() {
     <div style={{ background: HERO_BG }} className="text-[#111111]">
       <Header />
       <main>
-        {/* ─── HERO: TopographyBackground + mixed Fraîche typography ─── */}
+        {/* HERO */}
         <HeroEntrance>
           <section className="relative flex min-h-[calc(100svh-6.5rem)] flex-col justify-center overflow-hidden py-16 md:min-h-[calc(100svh-7rem)] md:py-24">
-            {/* Topographic animation — same component as homepage hero */}
             <TopographyBackground
               lineCount={20}
               lineColor="rgba(180, 140, 60, 0.18)"
@@ -187,20 +173,9 @@ export default function Variation5Page() {
                 <HeroStaggerChild>
                   <HeroColumnStagger className="max-w-4xl">
                     <HeroLineItem>
-                      <p
-                        className="mb-8 font-mono text-[11px] uppercase tracking-[0.2em]"
-                        style={{ color: MUTED }}
-                      >
-                        Caliga · Research collective
-                      </p>
+                      <span />
                     </HeroLineItem>
 
-                    {/*
-                     * Fraîche technique — matches homepage pattern exactly:
-                     * `font-sans font-semibold` base, with inline
-                     * `font-serif-display font-semibold italic` spans for the serif words.
-                     * Faded words use the DIM colour for visual rhythm.
-                     */}
                     <HeroLineItem>
                       <h1
                         className="font-sans font-semibold leading-[1.08] tracking-tight"
@@ -209,15 +184,11 @@ export default function Variation5Page() {
                           color: INK,
                         }}
                       >
-                        <Faded>We research the</Faded>{" "}
-                        <Serif>technologies</Serif>
+                        <Faded>Primary research on</Faded> frontier technology
                         <br />
-                        <Faded>that are</Faded> rewriting the
+                        <Faded>before the market</Faded>
                         <br />
-                        <Accent>fabric of tech</Accent>—<Serif>before</Serif>
-                        <br />
-                        <Faded>the</Faded>{" "}
-                        <Serif>revolution becomes obvious.</Serif>
+                        <Accent>prices it in.</Accent>
                       </h1>
                     </HeroLineItem>
 
@@ -227,17 +198,11 @@ export default function Variation5Page() {
                           className="font-serif-display text-base leading-relaxed md:text-lg"
                           style={{ color: "#4a4540" }}
                         >
-                          Caliga is a two-seat research collective at the
-                          frontier of crypto, fintech, deep tech, and frontier
-                          AI. We publish before we pitch—and we pitch rarely.
+                          Caliga is a research collective covering crypto,
+                          fintech, deep tech, and frontier AI. We publish before
+                          we pitch, and we pitch rarely.
                         </p>
                         <div className="flex flex-col justify-center gap-4">
-                          <p
-                            className="font-mono text-[11px] uppercase tracking-[0.2em]"
-                            style={{ color: MUTED }}
-                          >
-                            Crypto · Fintech · Deep tech · Frontier AI
-                          </p>
                           <div className="flex flex-wrap gap-3">
                             <a
                               href="/variation5#contact"
@@ -264,13 +229,12 @@ export default function Variation5Page() {
           </section>
         </HeroEntrance>
 
-        {/* ─── DARK MANIFESTO ─── */}
+        {/* THESIS */}
         <SectionReveal amount={0.06}>
           <section
             className="relative overflow-hidden py-20 md:py-32"
             style={{ background: DARK_SECTION }}
           >
-            {/* Aurora — very faint gray shimmer on near-black, barely visible */}
             <AuroraBackground
               animationSpeed={90}
               opacity={0.13}
@@ -284,12 +248,6 @@ export default function Variation5Page() {
                 Why we exist
               </p>
 
-              {/*
-               * Fraîche mid-sentence style switch:
-               * Some words in font-serif-display italic (Instrument Serif),
-               * others in font-sans semibold (Geist Sans),
-               * some faded with opacity — all at font-semibold weight.
-               */}
               <h2
                 className="max-w-4xl font-sans font-semibold leading-[1.12] tracking-tight"
                 style={{
@@ -297,21 +255,12 @@ export default function Variation5Page() {
                   color: WHITE,
                 }}
               >
-                The best outcomes are{" "}
-                <span style={{ color: "#3a3a3a" }}>nothing short of</span>{" "}
-                <span
-                  className="font-serif-display font-semibold italic"
-                  style={{ color: WHITE }}
-                >
-                  under-published,
-                </span>{" "}
-                <span style={{ color: "#3a3a3a" }}>under-researched, and</span>{" "}
-                <span
-                  className="font-serif-display font-semibold italic"
-                  style={{ color: AMBER }}
-                >
-                  over-waited-for.
-                </span>
+                Most of the value in frontier markets
+                <br />
+                <span style={{ color: "#3a3a3a" }}>is captured</span> before the
+                thesis
+                <br />
+                <span style={{ color: AMBER }}>becomes consensus.</span>
               </h2>
 
               <div className="mt-12 grid gap-8 lg:grid-cols-2">
@@ -319,116 +268,121 @@ export default function Variation5Page() {
                   className="font-serif-display text-lg leading-relaxed"
                   style={{ color: "#8a8880" }}
                 >
-                  Frontier technology creates information asymmetry at scale.
-                  The teams that understand mechanism—not just
-                  momentum—consistently reach outcomes the market misses. We
-                  exist to correct that asymmetry.
+                  Frontier technology moves faster than most research processes.
+                  The teams that reach good decisions do so because they
+                  understand how things work, not just that they are moving.
                 </p>
                 <p
                   className="font-serif-display text-base leading-relaxed"
                   style={{ color: "#6a6662" }}
                 >
-                  We bias toward founders who want reviewers that read code,
-                  cite sources, and write the uncomfortable questions into the
-                  appendix—whether or not a check ever follows. Capital is
-                  downstream and optional.
+                  We work with founders who expect reviewers to read the
+                  implementation, question the assumptions, and document the
+                  edge cases. Whether capital follows is a separate question.
                 </p>
               </div>
             </Container>
           </section>
         </SectionReveal>
 
-        {/* ─── RESEARCH AREAS (commented out) ─── */}
-        {(false as boolean) && <SectionReveal amount={0.07}>
-          <section
-            id="research"
-            className="scroll-mt-24 border-b border-t py-16 md:py-24"
-            style={{ background: "#f8f7f4", borderColor: RULE }}
-          >
-            <Container>
-              <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-                <div className="lg:col-span-4">
-                  <p
-                    className="mb-4 font-mono text-[10px] font-medium uppercase tracking-[0.22em]"
-                    style={{ color: MUTED }}
-                  >
-                    Research areas
-                  </p>
-                  <h2
-                    className="font-sans font-semibold leading-tight tracking-tight text-3xl md:text-4xl"
-                    style={{ color: INK }}
-                  >
-                    We are guided by <Serif>four clear</Serif> domains.
-                  </h2>
-                  <p
-                    className="mt-5 font-serif-display text-base leading-relaxed"
-                    style={{ color: "#5a5550" }}
-                  >
-                    Within each, a single bar: primary research, open
-                    methodology, and explicit what-has-to-be-true statements. We
-                    say no when the work doesn&apos;t fit.
-                  </p>
-                </div>
+        {/* RESEARCH AREAS (hidden) */}
+        {(false as boolean) && (
+          <SectionReveal amount={0.07}>
+            <section
+              id="research"
+              className="scroll-mt-24 border-b border-t py-16 md:py-24"
+              style={{ background: "#f8f7f4", borderColor: RULE }}
+            >
+              <Container>
+                <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
+                  <div className="lg:col-span-4">
+                    <p
+                      className="mb-4 font-mono text-[10px] font-medium uppercase tracking-[0.22em]"
+                      style={{ color: MUTED }}
+                    >
+                      Research areas
+                    </p>
+                    <h2
+                      className="font-sans font-semibold leading-tight tracking-tight text-3xl md:text-4xl"
+                      style={{ color: INK }}
+                    >
+                      Four domains. One standard.
+                    </h2>
+                    <p
+                      className="mt-5 font-serif-display text-base leading-relaxed"
+                      style={{ color: "#5a5550" }}
+                    >
+                      Within each: primary research, documented methodology, and
+                      explicit assumptions. We decline work that doesn&apos;t
+                      meet that bar.
+                    </p>
+                  </div>
 
-                <div className="lg:col-span-8">
-                  <StaggerOnView className="grid gap-6 sm:grid-cols-2">
-                    {researchAreas.map((area, i) => (
-                      <StaggerItem key={area.label}>
-                        {/* relative + overflow-hidden so bg animation is clipped to card */}
-                        <div
-                          className="relative overflow-hidden border p-6"
-                          style={{ borderColor: RULE, background: WHITE }}
-                        >
-                          {/* Background animation — pointer-events-none so it doesn't block text */}
+                  <div className="lg:col-span-8">
+                    <StaggerOnView className="grid gap-6 sm:grid-cols-2">
+                      {researchAreas.map((area, i) => (
+                        <StaggerItem key={area.label}>
                           <div
-                            className="pointer-events-none absolute inset-0"
-                            aria-hidden
+                            className="relative overflow-hidden border p-6"
+                            style={{ borderColor: RULE, background: WHITE }}
                           >
-                            {area.bg}
-                          </div>
-                          <div className="relative">
-                            <p
-                              className="font-mono text-[10px] font-medium uppercase tracking-[0.16em]"
-                              style={{ color: MUTED }}
-                            >
-                              {area.sub}
-                            </p>
-                            <h3
-                              className="mt-3 font-sans text-lg font-semibold tracking-tight"
-                              style={{ color: INK }}
-                            >
-                              {area.label}
-                            </h3>
-                            <p
-                              className="mt-2 font-serif-display text-sm leading-relaxed"
-                              style={{ color: "#6a6560" }}
-                            >
-                              {area.body}
-                            </p>
                             <div
-                              className="mt-5 h-px w-12"
-                              style={{ background: i % 2 === 0 ? AMBER : INK }}
-                            />
+                              className="pointer-events-none absolute inset-0"
+                              aria-hidden
+                            >
+                              {area.bg}
+                            </div>
+                            <div className="relative">
+                              <p
+                                className="font-mono text-[10px] font-medium uppercase tracking-[0.16em]"
+                                style={{ color: MUTED }}
+                              >
+                                {area.sub}
+                              </p>
+                              <h3
+                                className="mt-3 font-sans text-lg font-semibold tracking-tight"
+                                style={{ color: INK }}
+                              >
+                                {area.label}
+                              </h3>
+                              <p
+                                className="mt-2 font-serif-display text-sm leading-relaxed"
+                                style={{ color: "#6a6560" }}
+                              >
+                                {area.body}
+                              </p>
+                              <div
+                                className="mt-5 h-px w-12"
+                                style={{
+                                  background: i % 2 === 0 ? AMBER : INK,
+                                }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </StaggerItem>
-                    ))}
-                  </StaggerOnView>
+                        </StaggerItem>
+                      ))}
+                    </StaggerOnView>
+                  </div>
                 </div>
-              </div>
-            </Container>
-          </section>
-        </SectionReveal>}
+              </Container>
+            </section>
+          </SectionReveal>
+        )}
 
-        {/* ─── THE METHOD ─── */}
+        {/* THE METHOD */}
         <SectionReveal amount={0.06}>
           <section
             className="relative overflow-hidden border-b py-16 md:py-24"
             style={{ background: WHITE, borderColor: RULE }}
           >
-            {/* Conway's Game of Life — dark cells on white, very subtle */}
             <div className="pointer-events-none absolute inset-0" aria-hidden>
-              <GameOfLife cellSize={4} color="#111111" speed={650} opacity={0.028} density={0.14} />
+              <GameOfLife
+                cellSize={4}
+                color="#111111"
+                speed={650}
+                opacity={0.028}
+                density={0.14}
+              />
             </div>
             <Container>
               <div className="mx-auto max-w-4xl">
@@ -442,26 +396,30 @@ export default function Variation5Page() {
                   className="font-sans font-semibold leading-tight tracking-tight text-3xl md:text-4xl text-center"
                   style={{ color: INK }}
                 >
-                  Research <Serif>first.</Serif>{" "}
-                  <span style={{ color: DIM }}>Capital is</span>{" "}
-                  <span style={{ color: AMBER }}>downstream</span>{" "}
-                  <span style={{ color: DIM }}>and optional.</span>
+                  Research first.{" "}
+                  <span style={{ color: DIM }}>Capital follows</span>{" "}
+                  <span style={{ color: AMBER }}>
+                    when the work supports it.
+                  </span>
                 </h2>
                 <p
                   className="mx-auto mt-6 max-w-2xl font-serif-display text-base leading-relaxed text-center md:text-lg"
                   style={{ color: "#5a5550" }}
                 >
-                  When we deploy capital it is early, concentrated, and always
-                  downstream of work you can read and stress-test. We publish
-                  memos, models, and datasets you can trace—protocol economics,
-                  security assumptions, frontier compute.
+                  Our published work includes memos, models, and datasets that
+                  can be independently verified. When we allocate capital it is
+                  early, concentrated, and based on a documented thesis.
                 </p>
 
-                {/* Three method pillars — agent-assisted card has FlickeringGrid */}
                 <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
-                  {/* Open methodology */}
-                  <div className="relative overflow-hidden border p-6" style={{ borderColor: RULE, background: WHITE }}>
-                    <div className="pointer-events-none absolute inset-0" aria-hidden>
+                  <div
+                    className="relative overflow-hidden border p-6"
+                    style={{ borderColor: RULE, background: WHITE }}
+                  >
+                    <div
+                      className="pointer-events-none absolute inset-0"
+                      aria-hidden
+                    >
                       <OpenNetworkAnimation color="#111111" opacity={0.09} />
                     </div>
                     <div className="relative">
@@ -475,14 +433,19 @@ export default function Variation5Page() {
                         className="mt-2 font-serif-display text-sm leading-relaxed"
                         style={{ color: MUTED }}
                       >
-                        Sources cited. Steps reproducible. No black box.
+                        Sources cited. Steps documented. Findings reproducible.
                       </p>
                     </div>
                   </div>
 
-                  {/* Adversarial review */}
-                  <div className="relative overflow-hidden border p-6" style={{ borderColor: RULE, background: WHITE }}>
-                    <div className="pointer-events-none absolute inset-0" aria-hidden>
+                  <div
+                    className="relative overflow-hidden border p-6"
+                    style={{ borderColor: RULE, background: WHITE }}
+                  >
+                    <div
+                      className="pointer-events-none absolute inset-0"
+                      aria-hidden
+                    >
                       <TreeAnimation color="#111111" opacity={0.12} />
                     </div>
                     <div className="relative">
@@ -496,12 +459,12 @@ export default function Variation5Page() {
                         className="mt-2 font-serif-display text-sm leading-relaxed"
                         style={{ color: MUTED }}
                       >
-                        Uncomfortable questions go in the appendix.
+                        Hard questions are part of the deliverable, not a
+                        footnote.
                       </p>
                     </div>
                   </div>
 
-                  {/* Agent-assisted — FlickeringGrid background signals the AI/computational character */}
                   <div
                     className="relative overflow-hidden border p-6"
                     style={{ borderColor: RULE, background: WHITE }}
@@ -524,13 +487,14 @@ export default function Variation5Page() {
                         className="font-sans font-semibold text-sm"
                         style={{ color: INK }}
                       >
-                        Agent-assisted synthesis
+                        AI-assisted synthesis
                       </p>
                       <p
                         className="mt-2 font-serif-display text-sm leading-relaxed"
                         style={{ color: MUTED }}
                       >
-                        AI on the desk—rigor scales without becoming opaque.
+                        Structured tools for faster research without sacrificing
+                        rigor.
                       </p>
                     </div>
                   </div>
@@ -540,7 +504,7 @@ export default function Variation5Page() {
           </section>
         </SectionReveal>
 
-        {/* ─── TEAM: PixelMountain + PixelHammer, equal heights ─── */}
+        {/* TEAM */}
         <SectionReveal amount={0.07}>
           <section
             id="team"
@@ -558,26 +522,21 @@ export default function Variation5Page() {
                 className="font-sans font-semibold leading-tight tracking-tight text-3xl md:text-4xl"
                 style={{ color: INK }}
               >
-                Two seats. <Serif>One research bar.</Serif>
+                Multiple members, one standard.
               </h2>
               <p
                 className="mt-3 max-w-2xl font-serif-display text-sm leading-relaxed md:text-base"
                 style={{ color: MUTED }}
               >
-                Operators and researchers who publish before they pitch.
+                We publish before we pitch.
               </p>
 
-              {/*
-               * items-stretch (CSS grid default) ensures both columns reach equal row height.
-               * Each article is h-full so it fills the grid cell.
-               */}
               <StaggerOnView className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
                 {team.map((member) => {
                   const { Bg } = member;
                   return (
                     <StaggerItem key={member.handle} className="h-full">
                       <article className="relative flex h-full flex-col overflow-hidden border border-zinc-200/90 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-                        {/* PixelMountain or PixelHammer — warm orangeish-brown accent */}
                         <div
                           className="pointer-events-none absolute inset-0 opacity-70"
                           aria-hidden
@@ -633,7 +592,7 @@ export default function Variation5Page() {
           </section>
         </SectionReveal>
 
-        {/* ─── CONTACT ─── */}
+        {/* CONTACT */}
         <SectionReveal amount={0.07}>
           <section
             id="contact"
@@ -653,15 +612,15 @@ export default function Variation5Page() {
                     className="font-sans font-semibold leading-tight tracking-tight text-3xl md:text-4xl"
                     style={{ color: WHITE }}
                   >
-                    Let&apos;s go further <Serif>together.</Serif>
+                    Let&apos;s work together.
                   </h2>
                   <p
                     className="mt-5 font-serif-display text-base leading-relaxed md:text-lg"
                     style={{ color: "#8a8880" }}
                   >
-                    Share the problem, what&apos;s already built, and what you
-                    want pressure-tested. We reply when the research can add
-                    real leverage—capital is downstream and optional.
+                    Share the problem, what you have built, and what you want
+                    reviewed. We respond when the research can add real value.
+                    Capital is a separate question.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     <a
@@ -687,34 +646,32 @@ export default function Variation5Page() {
                   className="relative overflow-hidden border p-8 md:p-10"
                   style={{ borderColor: "#1e1e1e" }}
                 >
-                  {/* Warm floating paths — orangeish-brown (#c9a87c) on near-black */}
                   <AtAGlanceFloatingPaths strokeColor="#c9a87c" />
                   <div className="relative">
-                  <p
-                    className="font-mono text-[11px] font-medium uppercase tracking-[0.16em]"
-                    style={{ color: "#555" }}
-                  >
-                    Operating note
-                  </p>
-                  <p
-                    className="mt-6 font-sans text-xl font-semibold leading-snug"
-                    style={{ color: WHITE }}
-                  >
-                    Frontier tech rewards teams that can show mechanism, not
-                    just momentum.
-                  </p>
-                  <p
-                    className="mt-4 font-serif-display text-base leading-relaxed"
-                    style={{ color: "#8a8880" }}
-                  >
-                    Our default output is research you can fork—not a deck you
-                    admire once. When we allocate, it is narrow, repeatable, and
-                    always late in the process.
-                  </p>
+                    <p
+                      className="font-mono text-[11px] font-medium uppercase tracking-[0.16em]"
+                      style={{ color: "#555" }}
+                    >
+                      How we work
+                    </p>
+                    <p
+                      className="mt-6 font-sans text-xl font-semibold leading-snug"
+                      style={{ color: WHITE }}
+                    >
+                      Frontier markets reward teams that understand mechanism,
+                      not just momentum.
+                    </p>
+                    <p
+                      className="mt-4 font-serif-display text-base leading-relaxed"
+                      style={{ color: "#8a8880" }}
+                    >
+                      Our output is research you can trace, not a presentation.
+                      When we allocate, we do so early, selectively, and always
+                      after the work is complete.
+                    </p>
                   </div>
                 </div>
               </div>
-
             </Container>
           </section>
         </SectionReveal>
