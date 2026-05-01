@@ -15,10 +15,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getWritingPostBySlug(slug);
   if (!post) {
-    return { title: "Not found | Meridia" };
+    return { title: "Not found | Caliga" };
   }
   return {
-    title: `${post.title} | Meridia`,
+    title: `${post.title} | Caliga`,
     description: post.excerpt,
   };
 }

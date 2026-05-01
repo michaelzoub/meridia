@@ -82,15 +82,18 @@ const team = [
 ];
 
 export const metadata: Metadata = {
-  title: "Meridia — Research at the frontier",
+  title: "Caliga — Research at the frontier",
   description:
-    "Research and capital that finds the frontier before the crowd. Meridia is a research collective covering crypto, fintech, deep tech, and frontier AI.",
+    "Research and capital that finds the frontier before the crowd. Caliga is a research collective covering crypto, fintech, deep tech, and frontier AI.",
   robots: { index: false, follow: true },
 };
 
 function U({ children }: { children: React.ReactNode }) {
   return (
-    <span className="underline decoration-[3px] underline-offset-[10px]" style={{ textDecorationColor: INK }}>
+    <span
+      className="underline decoration-[3px] underline-offset-[10px]"
+      style={{ textDecorationColor: INK }}
+    >
       {children}
     </span>
   );
@@ -98,7 +101,10 @@ function U({ children }: { children: React.ReactNode }) {
 
 function DarkU({ children }: { children: React.ReactNode }) {
   return (
-    <span className="underline decoration-[2px] underline-offset-[8px]" style={{ textDecorationColor: CREAM }}>
+    <span
+      className="underline decoration-[2px] underline-offset-[8px]"
+      style={{ textDecorationColor: CREAM }}
+    >
       {children}
     </span>
   );
@@ -122,15 +128,19 @@ export default function Variation2Page() {
                         className="font-mono text-[11px] uppercase tracking-[0.22em]"
                         style={{ color: WARM_MUTED }}
                       >
-                        Meridia · Research collective
+                        Caliga · Research collective
                       </p>
                     </HeroLineItem>
                     <HeroLineItem className="mt-7">
                       <h1
                         className="font-sans font-black leading-[1.00] tracking-[-0.025em]"
-                        style={{ fontSize: "clamp(2.75rem, 8.5vw, 6.25rem)", color: INK }}
+                        style={{
+                          fontSize: "clamp(2.75rem, 8.5vw, 6.25rem)",
+                          color: INK,
+                        }}
                       >
-                        Research that sees the <U>future</U> before it&apos;s <U>obvious</U>
+                        Research that sees the <U>future</U> before it&apos;s{" "}
+                        <U>obvious</U>
                       </h1>
                     </HeroLineItem>
                   </HeroColumnStagger>
@@ -145,9 +155,10 @@ export default function Variation2Page() {
                       className="font-serif-display text-lg leading-relaxed md:text-xl"
                       style={{ color: "#3d3830" }}
                     >
-                      Technology is rewriting the rules of finance and human coordination.
-                      Meridia exists to understand those rules before they&apos;re
-                      written—and back the people writing them.
+                      Technology is rewriting the rules of finance and human
+                      coordination. Caliga exists to understand those rules
+                      before they&apos;re written—and back the people writing
+                      them.
                     </p>
                     <div className="flex flex-col justify-end gap-6">
                       <p
@@ -194,7 +205,10 @@ export default function Variation2Page() {
                   </p>
                   <h2
                     className="font-sans font-bold leading-[1.06] tracking-tight"
-                    style={{ fontSize: "clamp(1.85rem, 4vw, 3.25rem)", color: CREAM }}
+                    style={{
+                      fontSize: "clamp(1.85rem, 4vw, 3.25rem)",
+                      color: CREAM,
+                    }}
                   >
                     Rigorous work ships <DarkU>first</DarkU>. Capital follows.
                   </h2>
@@ -202,8 +216,9 @@ export default function Variation2Page() {
                     className="mt-6 font-serif-display text-base leading-relaxed md:text-lg"
                     style={{ color: "#a8a29c" }}
                   >
-                    We publish memos, models, and datasets you can trace—protocol economics,
-                    security assumptions, frontier compute. Evidence beats narrative, every time.
+                    We publish memos, models, and datasets you can
+                    trace—protocol economics, security assumptions, frontier
+                    compute. Evidence beats narrative, every time.
                   </p>
                 </div>
                 <div>
@@ -220,7 +235,10 @@ export default function Variation2Page() {
                         {item.n}
                       </span>
                       <div>
-                        <p className="font-sans text-sm font-semibold" style={{ color: CREAM }}>
+                        <p
+                          className="font-sans text-sm font-semibold"
+                          style={{ color: CREAM }}
+                        >
                           {item.label}
                         </p>
                         <p
@@ -252,7 +270,10 @@ export default function Variation2Page() {
                   </p>
                   <h2
                     className="font-sans font-bold leading-[1.06] tracking-tight"
-                    style={{ fontSize: "clamp(1.85rem, 4vw, 3.25rem)", color: INK }}
+                    style={{
+                      fontSize: "clamp(1.85rem, 4vw, 3.25rem)",
+                      color: INK,
+                    }}
                   >
                     The best outcomes are{" "}
                     <span
@@ -269,17 +290,17 @@ export default function Variation2Page() {
                     className="font-serif-display text-lg leading-relaxed md:text-xl"
                     style={{ color: "#3d3830" }}
                   >
-                    Frontier technology creates information asymmetry at scale. The teams that
-                    understand mechanism—not just momentum—consistently reach outcomes the market
-                    misses.
+                    Frontier technology creates information asymmetry at scale.
+                    The teams that understand mechanism—not just
+                    momentum—consistently reach outcomes the market misses.
                   </p>
                   <p
                     className="mt-5 font-serif-display text-base leading-relaxed"
                     style={{ color: WARM_MUTED }}
                   >
-                    We bias toward founders who want reviewers that read code, cite sources, and
-                    write the uncomfortable questions into the appendix. Capital is downstream and
-                    optional.
+                    We bias toward founders who want reviewers that read code,
+                    cite sources, and write the uncomfortable questions into the
+                    appendix. Capital is downstream and optional.
                   </p>
                   <div
                     className="mt-10 grid grid-cols-2 gap-5 border-t pt-8 sm:grid-cols-4"
@@ -287,7 +308,10 @@ export default function Variation2Page() {
                   >
                     {domains.map((d) => (
                       <div key={d.label}>
-                        <p className="font-sans text-sm font-semibold" style={{ color: INK }}>
+                        <p
+                          className="font-sans text-sm font-semibold"
+                          style={{ color: INK }}
+                        >
                           {d.label}
                         </p>
                         <p
@@ -315,10 +339,13 @@ export default function Variation2Page() {
               <blockquote className="max-w-5xl">
                 <p
                   className="font-sans font-bold leading-[1.1] tracking-tight"
-                  style={{ fontSize: "clamp(1.65rem, 3.8vw, 2.85rem)", color: INK }}
+                  style={{
+                    fontSize: "clamp(1.65rem, 3.8vw, 2.85rem)",
+                    color: INK,
+                  }}
                 >
-                  &ldquo;The next decade will be defined by who understood the technology before it
-                  was{" "}
+                  &ldquo;The next decade will be defined by who understood the
+                  technology before it was{" "}
                   <span
                     className="underline decoration-[2.5px] underline-offset-[7px]"
                     style={{ textDecorationColor: INK }}
@@ -328,12 +355,15 @@ export default function Variation2Page() {
                   —and who acted on that understanding first.&rdquo;
                 </p>
                 <footer className="mt-8 flex items-center gap-3">
-                  <div className="h-px w-8" style={{ background: WARM_MUTED }} />
+                  <div
+                    className="h-px w-8"
+                    style={{ background: WARM_MUTED }}
+                  />
                   <p
                     className="font-mono text-[11px] uppercase tracking-[0.18em]"
                     style={{ color: WARM_MUTED }}
                   >
-                    Meridia · Research thesis
+                    Caliga · Research thesis
                   </p>
                 </footer>
               </blockquote>
@@ -359,7 +389,10 @@ export default function Variation2Page() {
                   </p>
                   <h2
                     className="font-sans font-bold leading-[1.06] tracking-tight"
-                    style={{ fontSize: "clamp(1.85rem, 4vw, 3.25rem)", color: INK }}
+                    style={{
+                      fontSize: "clamp(1.85rem, 4vw, 3.25rem)",
+                      color: INK,
+                    }}
                   >
                     One research bar.{" "}
                     <span
@@ -374,11 +407,15 @@ export default function Variation2Page() {
                     className="mt-5 font-serif-display text-base leading-relaxed"
                     style={{ color: "#3d3830" }}
                   >
-                    When we deploy capital it is early, concentrated, and always downstream of work
-                    you can read and stress-test. Capital is secondary and selective.
+                    When we deploy capital it is early, concentrated, and always
+                    downstream of work you can read and stress-test. Capital is
+                    secondary and selective.
                   </p>
                 </div>
-                <div className="border" style={{ borderColor: WARM_BORDER, background: "white" }}>
+                <div
+                  className="border"
+                  style={{ borderColor: WARM_BORDER, background: "white" }}
+                >
                   {approachSteps.map((step, i, arr) => (
                     <div key={step.n}>
                       <div className="px-7 py-8 md:px-10 md:py-9">
@@ -406,7 +443,10 @@ export default function Variation2Page() {
                         </div>
                       </div>
                       {i < arr.length - 1 && (
-                        <div className="border-t" style={{ borderColor: WARM_BORDER }} />
+                        <div
+                          className="border-t"
+                          style={{ borderColor: WARM_BORDER }}
+                        />
                       )}
                     </div>
                   ))}
@@ -455,15 +495,26 @@ export default function Variation2Page() {
                     <StaggerItem key={member.handle}>
                       <article
                         className="relative flex h-full flex-col overflow-hidden border"
-                        style={{ borderColor: WARM_BORDER, background: "white" }}
+                        style={{
+                          borderColor: WARM_BORDER,
+                          background: "white",
+                        }}
                       >
-                        <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden>
+                        <div
+                          className="pointer-events-none absolute inset-0 opacity-40"
+                          aria-hidden
+                        >
                           <CardBg />
                         </div>
                         <div className="relative flex justify-center px-7 pt-7 md:justify-start">
                           <div
                             className="relative aspect-[4/5] w-[min(100%,10rem)] shrink-0 overflow-hidden ring-1 sm:w-[10.5rem] md:w-[9.25rem] lg:w-[10rem]"
-                            style={{ background: "#e0dbd3", ringColor: WARM_BORDER } as React.CSSProperties}
+                            style={
+                              {
+                                background: "#e0dbd3",
+                                ringColor: WARM_BORDER,
+                              } as React.CSSProperties
+                            }
                           >
                             <Image
                               src={member.image}
@@ -475,16 +526,24 @@ export default function Variation2Page() {
                           </div>
                         </div>
                         <div className="relative flex flex-1 flex-col px-7 pb-7 pt-6">
-                          <div className="h-px w-10" style={{ background: INK + "cc" }} />
+                          <div
+                            className="h-px w-10"
+                            style={{ background: INK + "cc" }}
+                          />
                           <p
                             className="mt-4 font-mono text-[10px] font-medium uppercase tracking-[0.2em]"
                             style={{ color: INK }}
                           >
                             {member.handle}
-                            <span className="mx-1.5 font-normal" style={{ color: "#b0a89e" }}>
+                            <span
+                              className="mx-1.5 font-normal"
+                              style={{ color: "#b0a89e" }}
+                            >
                               ·
                             </span>
-                            <span style={{ color: WARM_MUTED }}>{member.city}</span>
+                            <span style={{ color: WARM_MUTED }}>
+                              {member.city}
+                            </span>
                           </p>
                           <p
                             className="mt-1 font-mono text-[9px] uppercase tracking-[0.18em]"
@@ -509,7 +568,10 @@ export default function Variation2Page() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-6 inline-flex w-fit font-mono text-[10px] uppercase tracking-[0.16em] underline underline-offset-4 transition-opacity hover:opacity-60"
-                            style={{ color: WARM_MUTED, textDecorationColor: WARM_BORDER }}
+                            style={{
+                              color: WARM_MUTED,
+                              textDecorationColor: WARM_BORDER,
+                            }}
                           >
                             Profile on X ↗
                           </a>
@@ -541,7 +603,10 @@ export default function Variation2Page() {
                   </p>
                   <h2
                     className="font-sans font-bold leading-[1.06] tracking-tight"
-                    style={{ fontSize: "clamp(1.85rem, 4vw, 3.25rem)", color: CREAM }}
+                    style={{
+                      fontSize: "clamp(1.85rem, 4vw, 3.25rem)",
+                      color: CREAM,
+                    }}
                   >
                     Building at the <DarkU>frontier</DarkU>?
                   </h2>
@@ -549,9 +614,9 @@ export default function Variation2Page() {
                     className="mt-5 font-serif-display text-base leading-relaxed md:text-lg"
                     style={{ color: "#a8a29c" }}
                   >
-                    Share the problem, what&apos;s already built, and what you want
-                    pressure-tested. We reply when the research can add real leverage—capital is
-                    downstream and optional.
+                    Share the problem, what&apos;s already built, and what you
+                    want pressure-tested. We reply when the research can add
+                    real leverage—capital is downstream and optional.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     <a
@@ -572,23 +637,30 @@ export default function Variation2Page() {
                     </a>
                   </div>
                 </div>
-                <div className="border p-8 md:p-10" style={{ borderColor: "#2a2a2a" }}>
+                <div
+                  className="border p-8 md:p-10"
+                  style={{ borderColor: "#2a2a2a" }}
+                >
                   <p
                     className="font-mono text-[11px] uppercase tracking-[0.16em]"
                     style={{ color: "#555555" }}
                   >
                     Operating note
                   </p>
-                  <p className="mt-6 font-sans text-xl font-semibold leading-snug" style={{ color: CREAM }}>
-                    Frontier tech rewards teams that can show mechanism, not just momentum. Our
-                    default output is research you can fork—not a deck you admire once.
+                  <p
+                    className="mt-6 font-sans text-xl font-semibold leading-snug"
+                    style={{ color: CREAM }}
+                  >
+                    Frontier tech rewards teams that can show mechanism, not
+                    just momentum. Our default output is research you can
+                    fork—not a deck you admire once.
                   </p>
                   <p
                     className="mt-4 font-serif-display text-base leading-relaxed"
                     style={{ color: "#8a847e" }}
                   >
-                    When we allocate, it is narrow, repeatable, and always late in the
-                    process—never a substitute for the work product.
+                    When we allocate, it is narrow, repeatable, and always late
+                    in the process—never a substitute for the work product.
                   </p>
                 </div>
               </div>

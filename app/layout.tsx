@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     apple: [{ url: "/icon.png", type: "image/png" }],
   },
   title:
-    "Meridia | Research firm — crypto, fintech, deep tech, and anything in between",
+    "Caliga | Research firm — crypto, fintech, deep tech, and anything in between",
   description:
-    "Meridia is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
+    "Caliga is a research-led collective focused on crypto, fintech, deep tech, and anything in between. We publish memos, models, and data—capital is secondary to the work.",
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "Meridia",
-    title: "Meridia",
+    siteName: "Caliga",
+    title: "Caliga",
     description:
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: [
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
         url: "/adhd_banner.png",
         width: 1600,
         height: 529,
-        alt: "Meridia — research firm",
+        alt: "Caliga — research firm",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Meridia",
+    title: "Caliga",
     description:
       "Research-first collective covering crypto, fintech, deep tech, and anything in between.",
     images: ["/adhd_banner.png"],

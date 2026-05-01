@@ -11,7 +11,7 @@ export default async function DashboardLoginPage({ searchParams }: Props) {
     <main className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm">
         <p className="mb-8 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Meridia / Dashboard
+          Caliga / Dashboard
         </p>
         <h1 className="mb-6 font-sans text-2xl font-semibold text-zinc-900">
           Access dashboard

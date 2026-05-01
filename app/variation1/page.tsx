@@ -117,9 +117,9 @@ const btnSecondaryWarm =
   "!rounded-none !border !border-stone-400 !bg-white/90 !text-[#1d1d1d] hover:!border-stone-500 hover:!bg-white";
 
 export const metadata: Metadata = {
-  title: "Meridia — Variation (warm)",
+  title: "Caliga — Variation (warm)",
   description:
-    "Meridia: an alternate, warmer presentation—research-led, humane, and oriented toward the future we want to build together.",
+    "Caliga: an alternate, warmer presentation—research-led, humane, and oriented toward the future we want to build together.",
   robots: { index: false, follow: true },
 };
 
@@ -176,8 +176,8 @@ function WarmHeroPanel() {
           What we actually ship
         </h3>
         <p className="mt-2 font-serif-display text-sm leading-relaxed text-stone-700">
-          No abstract lattice—this is the work product: research artifacts first, everything else
-          follows.
+          No abstract lattice—this is the work product: research artifacts
+          first, everything else follows.
         </p>
         <ul className="mt-5 space-y-4 border-t border-stone-300/60 pt-5">
           {rows.map((row) => (
@@ -185,7 +185,9 @@ function WarmHeroPanel() {
               <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-amber-900/85">
                 {row.label}
               </p>
-              <p className="mt-1 font-serif-display text-sm leading-snug text-[#1d1d1d]">{row.body}</p>
+              <p className="mt-1 font-serif-display text-sm leading-snug text-[#1d1d1d]">
+                {row.body}
+              </p>
             </li>
           ))}
         </ul>
@@ -225,7 +227,7 @@ export default function Variation1Page() {
                     <HeroColumnStagger className="min-w-0 flex-1">
                       <HeroLineItem>
                         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-stone-600">
-                          Meridia · Research collective
+                          Caliga · Research collective
                         </p>
                       </HeroLineItem>
                       <HeroLineItem className="mt-5">
@@ -237,7 +239,9 @@ export default function Variation1Page() {
                         </p>
                         <h1 className="max-w-xl font-serif-display text-[clamp(2.15rem,5.2vw,3.65rem)] font-semibold leading-[1.06] tracking-tight text-[#1d1d1d]">
                           A future worth building,{" "}
-                          <span className="not-italic text-stone-800">one memo at a time</span>
+                          <span className="not-italic text-stone-800">
+                            one memo at a time
+                          </span>
                         </h1>
                         <p className="mt-4 max-w-lg font-sans text-lg font-medium leading-snug text-stone-800 md:text-xl">
                           A research firm for {STRIP_MANDATE.toLowerCase()}
@@ -245,16 +249,24 @@ export default function Variation1Page() {
                       </HeroLineItem>
                       <HeroLineItem className="mt-6">
                         <p className="max-w-md font-serif-display text-base leading-relaxed text-stone-700 md:text-lg">
-                          We are not here to intimidate—we publish, iterate, and correct in public.
-                          Evidence beats narrative; capital follows rigor, quietly.
+                          We are not here to intimidate—we publish, iterate, and
+                          correct in public. Evidence beats narrative; capital
+                          follows rigor, quietly.
                         </p>
                       </HeroLineItem>
                       <HeroLineItem className="mt-8">
                         <div className="flex flex-wrap gap-3">
-                          <Button href="/variation1#contact" className={btnPrimaryWarm}>
+                          <Button
+                            href="/variation1#contact"
+                            className={btnPrimaryWarm}
+                          >
                             Collaborate
                           </Button>
-                          <Button href="/variation1#thesis" variant="secondary" className={btnSecondaryWarm}>
+                          <Button
+                            href="/variation1#thesis"
+                            variant="secondary"
+                            className={btnSecondaryWarm}
+                          >
                             Read our approach
                           </Button>
                         </div>
@@ -304,15 +316,20 @@ export default function Variation1Page() {
                   <WarmSectionLabel>Why we exist</WarmSectionLabel>
                   <h2 className="mt-3 font-serif-display text-3xl font-semibold leading-[1.12] tracking-tight text-[#1d1d1d] md:text-4xl lg:text-[2.65rem]">
                     The best outcomes are{" "}
-                    <span className="italic text-stone-800">under-published</span>, not under-hyped.
+                    <span className="italic text-stone-800">
+                      under-published
+                    </span>
+                    , not under-hyped.
                   </h2>
                 </div>
-
               </div>
 
               <div className="mt-12">
                 <div className="relative overflow-hidden border border-dashed border-stone-400/80 bg-[#faf6f0] p-6 md:p-10">
-                  <div className="pointer-events-none absolute inset-0 opacity-80" aria-hidden>
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-80"
+                    aria-hidden
+                  >
                     <Ripple tone="warm" />
                   </div>
                   <div
@@ -320,8 +337,9 @@ export default function Variation1Page() {
                     aria-hidden
                   />
                   <p className="relative max-w-2xl font-serif-display text-lg leading-relaxed text-stone-800">
-                    We bias toward teams who want reviewers that read code, cite sources, and write the
-                    uncomfortable questions into the appendix—whether or not a check ever follows.
+                    We bias toward teams who want reviewers that read code, cite
+                    sources, and write the uncomfortable questions into the
+                    appendix—whether or not a check ever follows.
                   </p>
                   <WarmSectionNav />
                 </div>
@@ -341,18 +359,23 @@ export default function Variation1Page() {
               <div className="max-w-3xl">
                 <WarmSectionLabel>At a glance</WarmSectionLabel>
                 <h2 className="mt-2 font-serif-display text-3xl font-semibold tracking-tight text-[#1d1d1d] md:text-4xl lg:max-w-[40rem] lg:leading-[1.15]">
-                  One research desk, <span className="text-amber-950">rare capital</span>, no touring
-                  roadshow.
+                  One research desk,{" "}
+                  <span className="text-amber-950">rare capital</span>, no
+                  touring roadshow.
                 </h2>
                 <p className="mt-4 max-w-2xl font-serif-display text-base leading-relaxed text-stone-700 md:text-lg">
-                  One bar, shared definitions of proof, and artifacts you can stress-test. Memos and
-                  models first—vanity decks are the exception.
+                  One bar, shared definitions of proof, and artifacts you can
+                  stress-test. Memos and models first—vanity decks are the
+                  exception.
                 </p>
               </div>
 
               <div className="mt-12 grid gap-6 md:mt-14 md:grid-cols-2">
                 <div className="relative overflow-hidden border border-dashed border-stone-400/90 bg-white p-8">
-                  <div className="pointer-events-none absolute inset-0 opacity-90" aria-hidden>
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-90"
+                    aria-hidden
+                  >
                     <PixelBlast
                       variant="square"
                       pixelSize={2}
@@ -381,8 +404,9 @@ export default function Variation1Page() {
                       Two seats · one standard
                     </p>
                     <p className="mt-4 font-serif-display text-sm leading-relaxed text-stone-600">
-                      Two seats covering analytics and technical systems—one standard of rigor, no siloed
-                      opinions without work product.
+                      Two seats covering analytics and technical systems—one
+                      standard of rigor, no siloed opinions without work
+                      product.
                     </p>
                   </div>
                 </div>
@@ -397,8 +421,9 @@ export default function Variation1Page() {
                       <span className="text-stone-500">×1</span>
                     </p>
                     <p className="mt-4 font-serif-display text-sm leading-relaxed text-stone-600">
-                      Built across Asia and North America—remote-first review cycles with on-site time when
-                      hardware or lab work demands it.
+                      Built across Asia and North America—remote-first review
+                      cycles with on-site time when hardware or lab work demands
+                      it.
                     </p>
                   </div>
                   <div className="relative mt-8 border-t border-stone-200/90 pt-8">
@@ -410,7 +435,10 @@ export default function Variation1Page() {
               </div>
 
               <div className="relative mt-6 overflow-hidden border border-dashed border-stone-400/90 bg-white p-8 md:p-10">
-                <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden>
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-40"
+                  aria-hidden
+                >
                   <Threads
                     color={[201 / 255, 168 / 255, 124 / 255]}
                     amplitude={1}
@@ -419,14 +447,17 @@ export default function Variation1Page() {
                   />
                 </div>
                 <div className="relative max-w-4xl">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-stone-500">Mandate</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-stone-500">
+                    Mandate
+                  </p>
                   <p className="mt-4 font-sans text-xl font-semibold leading-snug tracking-tight text-[#1d1d1d] md:text-2xl">
                     {STRIP_MANDATE}
                   </p>
                   <p className="mt-5 font-serif-display text-sm leading-relaxed text-stone-700 md:text-base">
-                    L1/L2 and DeFi plumbing, fintech and custody rails, wallets and infra, frontier AI,
-                    robotics, and adjacent hardware. If it falls outside that perimeter, we are not the
-                    right desk—saying no is part of the product.
+                    L1/L2 and DeFi plumbing, fintech and custody rails, wallets
+                    and infra, frontier AI, robotics, and adjacent hardware. If
+                    it falls outside that perimeter, we are not the right
+                    desk—saying no is part of the product.
                   </p>
                 </div>
               </div>
@@ -451,13 +482,16 @@ export default function Variation1Page() {
                   </p>
                   <h2 className="font-serif-display text-3xl font-semibold tracking-tight text-[#1d1d1d] md:text-4xl">
                     <span className="bg-gradient-to-r from-amber-900 to-stone-800 bg-clip-text text-transparent">
-                      Meridia
+                      Caliga
                     </span>
                   </h2>
                   <p className="mt-4 font-serif-display text-base leading-relaxed text-stone-800">
                     When we deploy capital it is{" "}
-                    <span className="font-semibold text-amber-950">early, concentrated</span>, and always
-                    downstream of work you can read and stress-test.
+                    <span className="font-semibold text-amber-950">
+                      early, concentrated
+                    </span>
+                    , and always downstream of work you can read and
+                    stress-test.
                   </p>
                   <div className="relative mt-5 min-h-[120px] overflow-hidden border border-amber-900/25 bg-white">
                     <FlickeringGrid
@@ -474,9 +508,11 @@ export default function Variation1Page() {
                       </p>
                       <p className="mt-2 font-serif-display text-sm leading-relaxed text-stone-800">
                         We spearhead research workflows with{" "}
-                        <span className="font-semibold text-[#5c2e0e]">AI agents</span>—custom pipelines
-                        for ingestion, stress-testing, and publication—so rigor scales without becoming
-                        opaque.
+                        <span className="font-semibold text-[#5c2e0e]">
+                          AI agents
+                        </span>
+                        —custom pipelines for ingestion, stress-testing, and
+                        publication—so rigor scales without becoming opaque.
                       </p>
                     </div>
                   </div>
@@ -489,7 +525,7 @@ export default function Variation1Page() {
                     </Tag>
                     <Tag
                       showArrow
-                      href="mailto:hello@efimov.xyz?subject=Memo%20request%20%E2%80%94%20Meridia"
+                      href="mailto:hello@efimov.xyz?subject=Memo%20request%20%E2%80%94%20Caliga"
                       className="!rounded-none border-stone-400 bg-white text-stone-800"
                     >
                       Request memo
@@ -549,17 +585,22 @@ export default function Variation1Page() {
             <Container>
               <WarmSectionLabel>Team</WarmSectionLabel>
               <h2 className="max-w-2xl font-serif-display text-3xl font-semibold tracking-tight text-[#1d1d1d] md:text-4xl">
-                Two seats. <span className="text-amber-950">One research bar</span>.
+                Two seats.{" "}
+                <span className="text-amber-950">One research bar</span>.
               </h2>
               <p className="mt-3 max-w-2xl font-serif-display text-sm leading-relaxed text-stone-600 md:text-base">
-                The people behind the desk—operators and researchers who publish before they pitch.
+                The people behind the desk—operators and researchers who publish
+                before they pitch.
               </p>
               <StaggerOnView className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
                 {team.map((member, i) => {
                   return (
                     <StaggerItem key={member.handle}>
                       <article className="relative flex h-full flex-col overflow-hidden border border-stone-300/90 bg-white shadow-[0_1px_2px_rgba(45,35,25,0.06)]">
-                        <div className="pointer-events-none absolute inset-0 opacity-65" aria-hidden>
+                        <div
+                          className="pointer-events-none absolute inset-0 opacity-65"
+                          aria-hidden
+                        >
                           {i === 0 ? (
                             <PixelMountain accentRgb={WARM_PIXEL_ACCENT} />
                           ) : (
@@ -581,8 +622,12 @@ export default function Variation1Page() {
                           <div className="h-px w-10 bg-stone-800/85" />
                           <p className="mt-4 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#1d1d1d]">
                             {member.handle}
-                            <span className="mx-1.5 font-normal text-stone-400">·</span>
-                            <span className="text-stone-500">{member.city}</span>
+                            <span className="mx-1.5 font-normal text-stone-400">
+                              ·
+                            </span>
+                            <span className="text-stone-500">
+                              {member.city}
+                            </span>
                           </p>
                           <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.18em] text-stone-400">
                             Founder
@@ -612,18 +657,23 @@ export default function Variation1Page() {
         </SectionReveal>
 
         <SectionReveal amount={0.08}>
-          <section id="contact" className="scroll-mt-24 bg-[#f0ebe3] py-20 md:py-28">
+          <section
+            id="contact"
+            className="scroll-mt-24 bg-[#f0ebe3] py-20 md:py-28"
+          >
             <Container className="grid gap-10 md:grid-cols-2 md:items-stretch md:gap-8">
               <div className="flex flex-col justify-center border border-dashed border-[#b45309]/45 bg-[#faf6f0] p-6 md:p-9">
                 <WarmSectionLabel>Contact</WarmSectionLabel>
                 <h2 className="mt-2 font-serif-display text-3xl font-semibold leading-tight tracking-tight text-[#1d1d1d] md:text-4xl">
                   Building in <span className="text-amber-950">crypto</span>,{" "}
                   <span className="text-amber-950">fintech</span>,{" "}
-                  <span className="text-amber-950">deep tech</span>—or anywhere in between?
+                  <span className="text-amber-950">deep tech</span>—or anywhere
+                  in between?
                 </h2>
                 <p className="mt-4 font-serif-display text-base leading-relaxed text-stone-800">
-                  Share the problem, what is already built, and what you want pressure-tested. We reply
-                  when the research can add real leverage—capital is downstream and optional.
+                  Share the problem, what is already built, and what you want
+                  pressure-tested. We reply when the research can add real
+                  leverage—capital is downstream and optional.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Button
@@ -635,7 +685,11 @@ export default function Variation1Page() {
                   >
                     Message on X
                   </Button>
-                  <Button href="mailto:hello@efimov.xyz" variant="secondary" className={btnSecondaryWarm}>
+                  <Button
+                    href="mailto:hello@efimov.xyz"
+                    variant="secondary"
+                    className={btnSecondaryWarm}
+                  >
                     Email us
                   </Button>
                 </div>
@@ -651,12 +705,13 @@ export default function Variation1Page() {
                     Operating note
                   </p>
                   <p className="mt-6 font-sans text-xl font-semibold leading-snug text-[#faf6f0]">
-                    Frontier tech rewards teams that can show mechanism, not just momentum. Our default
-                    output is research you can fork—not a deck you admire once.
+                    Frontier tech rewards teams that can show mechanism, not
+                    just momentum. Our default output is research you can
+                    fork—not a deck you admire once.
                   </p>
                   <p className="mt-4 font-serif-display text-base leading-relaxed text-stone-400">
-                    When we allocate, it is narrow, repeatable, and always late in the process—never a
-                    substitute for the work product.
+                    When we allocate, it is narrow, repeatable, and always late
+                    in the process—never a substitute for the work product.
                   </p>
                 </div>
               </article>

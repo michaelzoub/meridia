@@ -25,6 +25,19 @@ import { cn } from "@/lib/utils";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, "");
+}
+
+async function copyRichText(html: string) {
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      "text/html": new Blob([html], { type: "text/html" }),
+      "text/plain": new Blob([stripHtml(html)], { type: "text/plain" }),
+    }),
+  ]);
+}
+
 interface ArticleEditorProps {
   initialId?: string;
   initialTitle?: string;
@@ -61,6 +74,7 @@ export default function ArticleEditor({
   const [isPublishing, setIsPublishing] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [showLinkInput, setShowLinkInput] = useState(false);
+  const [copiedFor, setCopiedFor] = useState<"substack" | "x" | null>(null);
 
   const contentRef = useRef(initialContent);
   const isDirty = useRef(false);
@@ -194,6 +208,34 @@ export default function ArticleEditor({
             {saveStatus === "saved" && "Saved"}
             {saveStatus === "error" && "Save failed"}
           </span>
+
+          <div className="h-4 w-px bg-zinc-200" />
+
+          <button
+            onClick={async () => {
+              await copyRichText(contentRef.current);
+              setCopiedFor("substack");
+              setTimeout(() => setCopiedFor(null), 2000);
+            }}
+            className="font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-500 transition-colors hover:text-zinc-900"
+            title="Copy for Substack"
+          >
+            {copiedFor === "substack" ? "Copied ✓" : "Substack"}
+          </button>
+          <button
+            onClick={async () => {
+              await copyRichText(contentRef.current);
+              setCopiedFor("x");
+              setTimeout(() => setCopiedFor(null), 2000);
+            }}
+            className="font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-500 transition-colors hover:text-zinc-900"
+            title="Copy for X Articles"
+          >
+            {copiedFor === "x" ? "Copied ✓" : "X Article"}
+          </button>
+
+          <div className="h-4 w-px bg-zinc-200" />
+
           <button
             onClick={() => doSave()}
             disabled={saveStatus === "saving"}

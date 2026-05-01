@@ -71,10 +71,11 @@ export default function PixelBlast({
     const startTime = performance.now();
     const rgb = hexToRgb(color);
 
-    // Two circles — one per founder
+    // Three circles — one per founder, in a gentle triangle arrangement
     const circles = [
-      { x: 0.33, y: 0.55, r: 0.28 },
-      { x: 0.67, y: 0.55, r: 0.28 },
+      { x: 0.22, y: 0.62, r: 0.28 },
+      { x: 0.5, y: 0.48, r: 0.28 },
+      { x: 0.78, y: 0.62, r: 0.28 },
     ];
 
     const resize = () => {
@@ -120,10 +121,10 @@ export default function PixelBlast({
 
             if (enableRipples && dist > 0.08 && dist < 1.9) {
               const wave =
-                Math.sin(dist * 10 - t * rippleSpeed * Math.PI * 2) * 0.5 +
-                0.5;
+                Math.sin(dist * 10 - t * rippleSpeed * Math.PI * 2) * 0.5 + 0.5;
               const falloff = Math.exp(-dist * 1.5);
-              intensity += wave * rippleIntensityScale * falloff * rippleThickness * 3;
+              intensity +=
+                wave * rippleIntensityScale * falloff * rippleThickness * 3;
             }
 
             // Fade near card edges

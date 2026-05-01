@@ -5,11 +5,13 @@ import { useEffect, useRef } from "react";
 const DEFAULT_ACCENT: [number, number, number] = [103, 232, 249];
 
 export type PixelMountainProps = {
-  /** RGB stroke/fill accent (default: cyan). Use warm sand/rust on Meridia / variation1. */
+  /** RGB stroke/fill accent (default: cyan). Use warm sand/rust on Caliga / variation1. */
   accentRgb?: [number, number, number];
 };
 
-export default function PixelMountain({ accentRgb = DEFAULT_ACCENT }: PixelMountainProps) {
+export default function PixelMountain({
+  accentRgb = DEFAULT_ACCENT,
+}: PixelMountainProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -67,7 +69,7 @@ export default function PixelMountain({ accentRgb = DEFAULT_ACCENT }: PixelMount
       const ch = canvas.height;
       ctx.clearRect(0, 0, cw, ch);
 
-      ctx.lineCap  = "round";
+      ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
       const baseY = ch * 1.01;
@@ -76,10 +78,10 @@ export default function PixelMountain({ accentRgb = DEFAULT_ACCENT }: PixelMount
 
       // ── Static nested mountain outlines ─────────────────────────────
       for (let i = 0; i < numLayers; i++) {
-        const frac  = (i + 1) / numLayers;
+        const frac = (i + 1) / numLayers;
         const halfW = cw * 0.52 * frac;
-        const peakY = baseY - ch * 0.60 * frac;
-        const opacity = 0.10 + frac * 0.16;
+        const peakY = baseY - ch * 0.6 * frac;
+        const opacity = 0.1 + frac * 0.16;
 
         if (i === numLayers - 1) {
           ctx.beginPath();
@@ -96,27 +98,27 @@ export default function PixelMountain({ accentRgb = DEFAULT_ACCENT }: PixelMount
         ctx.lineTo(peakX, peakY);
         ctx.lineTo(peakX + halfW, baseY);
         ctx.strokeStyle = `rgba(${r},${g},${b},${opacity.toFixed(3)})`;
-        ctx.lineWidth   = (0.6 + frac * 0.8) * dpr;
+        ctx.lineWidth = (0.6 + frac * 0.8) * dpr;
         ctx.stroke();
       }
 
       // ── Border-beam along the outermost mountain outline ────────────
       // Path: bottomLeft → peak → bottomRight
       const halfW = cw * 0.52;
-      const peakY = baseY - ch * 0.60;
+      const peakY = baseY - ch * 0.6;
 
       const p0 = { x: peakX - halfW, y: baseY };
-      const p1 = { x: peakX,         y: peakY };
+      const p1 = { x: peakX, y: peakY };
       const p2 = { x: peakX + halfW, y: baseY };
 
-      const legA  = Math.hypot(p1.x - p0.x, p1.y - p0.y);
-      const legB  = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      const legA = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+      const legB = Math.hypot(p2.x - p1.x, p2.y - p1.y);
       const total = legA + legB;
 
       // Beam: head travels at `total * 0.28` units/s, trail length = 22% of path
-      const trailLen  = total * 0.22;
-      const headDist  = (t * total * 0.28) % total;
-      const steps     = 32;
+      const trailLen = total * 0.22;
+      const headDist = (t * total * 0.28) % total;
+      const steps = 32;
 
       ctx.lineWidth = 1.8 * dpr;
 

@@ -8,9 +8,9 @@ import { getWritingPosts } from "@/lib/writing/queries";
 import { SOCIAL_X_HANDLE_DISPLAY, SOCIAL_X_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Writing | Meridia",
+  title: "Writing | Caliga",
   description:
-    "Essays, memos, and notes from the Meridia research desk—crypto, fintech, deep tech, and anything in between.",
+    "Essays, memos, and notes from the Caliga research desk—crypto, fintech, deep tech, and anything in between.",
 };
 
 /** Always render on the server so database-backed content is included in the HTML payload. */
@@ -29,7 +29,8 @@ export default async function WritingPage() {
             Research notes and memos
           </h1>
           <p className="mt-4 max-w-xl font-serif-display text-base leading-relaxed text-zinc-700">
-            Longer-form work from the desk—sourced, reproducible, and written to be forked.
+            Longer-form work from the desk—sourced, reproducible, and written to
+            be forked.
           </p>
 
           <ul className="mt-12 divide-y divide-zinc-200 border-t border-zinc-200">

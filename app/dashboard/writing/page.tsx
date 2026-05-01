@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase";
-import { deleteArticle } from "./actions";
+import { DeleteButton } from "./DeleteButton";
 
 export const metadata: Metadata = { title: "Writing Dashboard" };
 export const dynamic = "force-dynamic";
@@ -25,7 +25,7 @@ export default async function DashboardWritingPage() {
     <main className="min-h-screen bg-white">
       <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-4">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Meridia / Writing
+          Caliga / Writing
         </p>
         <Link
           href="/dashboard/writing/new"
@@ -82,9 +82,7 @@ export default async function DashboardWritingPage() {
                   <td className="py-3 pr-6">
                     <span
                       className={`inline-flex items-center font-mono text-[10px] uppercase tracking-[0.12em] ${
-                        article.published_at
-                          ? "text-cyan-700"
-                          : "text-zinc-400"
+                        article.published_at ? "text-cyan-700" : "text-zinc-400"
                       }`}
                     >
                       {article.published_at ? "Published" : "Draft"}
@@ -101,27 +99,7 @@ export default async function DashboardWritingPage() {
                       >
                         Edit
                       </Link>
-                      <form action={deleteArticle}>
-                        <input
-                          type="hidden"
-                          name="id"
-                          value={article.id as string}
-                        />
-                        <button
-                          type="submit"
-                          className="font-mono text-[10px] uppercase tracking-[0.12em] text-red-400 transition-colors hover:text-red-700"
-                          onClick={(e) => {
-                            if (
-                              !confirm(
-                                "Delete this article? This cannot be undone."
-                              )
-                            )
-                              e.preventDefault();
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </form>
+                      <DeleteButton id={article.id as string} />
                     </div>
                   </td>
                 </tr>
