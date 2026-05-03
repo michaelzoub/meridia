@@ -24,9 +24,9 @@ export default async function DashboardWritingPage() {
   return (
     <main className="min-h-screen bg-white">
       <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Caliga / Writing
-        </p>
+        <h1 className="font-sans text-[13px] font-medium text-zinc-900">
+          Articles
+        </h1>
         <Link
           href="/dashboard/writing/new"
           className="border border-zinc-900 bg-zinc-900 px-4 py-1.5 font-sans text-xs font-medium text-white transition-colors hover:bg-zinc-700"
