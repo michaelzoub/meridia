@@ -33,7 +33,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 key={href}
                 href={href}
                 className={cn(
-                  "inline-flex items-center gap-2 border px-3 py-1.5 font-sans text-xs font-medium transition-colors",
+                  "inline-flex items-center gap-2 border px-3 py-1.5 font-sans text-xs font-medium transition-[border-color,background-color,color] duration-150 ease-out",
                   active
                     ? "border-zinc-900 bg-zinc-900 text-white"
                     : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400 hover:text-zinc-900"

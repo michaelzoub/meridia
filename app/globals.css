@@ -39,6 +39,12 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -104,4 +110,25 @@ body {
 .animate-marquee-partners {
   animation: marquee 52s linear infinite;
   will-change: transform;
+}
+
+@keyframes editor-toolbar-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.editor-toolbar-reveal {
+  animation: editor-toolbar-reveal 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor-toolbar-reveal {
+    animation: none;
+  }
 }
