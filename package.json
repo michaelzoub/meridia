@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "cobe": "^2.0.1",
     "geist": "^1.7.0",
+    "katex": "^0.16.45",
     "lucide-react": "^1.7.0",
     "mermaid": "^11.14.0",
     "motion": "^12.38.0",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
+    "@types/katex": "^0.16.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

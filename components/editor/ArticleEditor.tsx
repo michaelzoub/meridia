@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
+import "katex/dist/katex.min.css";
 import {
   Bold,
   Italic,
@@ -19,11 +20,14 @@ import {
   Link2,
   Minus,
   ImageIcon,
+  Sigma,
+  Superscript,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveDraft, publishArticle } from "@/app/dashboard/writing/actions";
 import { cn } from "@/lib/utils";
+import { LatexBlock, LatexInline } from "@/components/editor/extensions/latexNodes";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
@@ -38,6 +42,12 @@ async function copyRichText(html: string) {
       "text/plain": new Blob([stripHtml(html)], { type: "text/plain" }),
     }),
   ]);
+}
+
+function countWordsFromPlainText(text: string): number {
+  const t = text.replace(/\u00a0/g, " ").trim();
+  if (!t) return 0;
+  return t.split(/\s+/).filter(Boolean).length;
 }
 
 interface ArticleEditorProps {
@@ -87,6 +97,7 @@ export default function ArticleEditor({
   const [copiedFor, setCopiedFor] = useState<"substack" | "x" | null>(null);
   const [uploadCount, setUploadCount] = useState(0);
   const [coverUploading, setCoverUploading] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
 
   const contentRef = useRef(initialContent);
   const isDirty = useRef(false);
@@ -101,12 +112,23 @@ export default function ArticleEditor({
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder: "Start writing…" }),
       Image.configure({ inline: false, allowBase64: false }),
+      LatexBlock,
+      LatexInline,
     ],
     content: initialContent,
     immediatelyRender: false,
+    onCreate({ editor }) {
+      contentRef.current = editor.getHTML();
+      setWordCount(
+        countWordsFromPlainText(editor.getText({ blockSeparator: "\n" }))
+      );
+    },
     onUpdate({ editor }) {
       contentRef.current = editor.getHTML();
       isDirty.current = true;
+      setWordCount(
+        countWordsFromPlainText(editor.getText({ blockSeparator: "\n" }))
+      );
     },
     editorProps: {
       // Drag-and-drop images onto the editor canvas
@@ -291,6 +313,28 @@ export default function ArticleEditor({
     },
     [uploadCoverFile]
   );
+
+  const insertLatexBlock = useCallback(() => {
+    if (!editor) return;
+    const latex = window.prompt("LaTeX (display math)", "E = mc^2");
+    if (latex === null) return;
+    editor
+      .chain()
+      .focus()
+      .insertContent({ type: "latexBlock", attrs: { latex } })
+      .run();
+  }, [editor]);
+
+  const insertLatexInline = useCallback(() => {
+    if (!editor) return;
+    const latex = window.prompt("LaTeX (inline math)", "x^2");
+    if (latex === null) return;
+    editor
+      .chain()
+      .focus()
+      .insertContent({ type: "latexInline", attrs: { latex } })
+      .run();
+  }, [editor]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -508,7 +552,8 @@ export default function ArticleEditor({
               showLinkInput && "pb-3"
             )}
           >
-            <div className="flex flex-wrap items-center gap-0.5 border border-zinc-200 p-1">
+            <div className="flex flex-wrap items-center justify-between gap-3 border border-zinc-200 p-1">
+            <div className="flex flex-wrap items-center gap-0.5">
             <ToolbarButton
               onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
               active={editor.isActive("heading", { level: 1 })}
@@ -619,6 +664,31 @@ export default function ArticleEditor({
             >
               <ImageIcon size={15} />
             </ToolbarButton>
+
+            <div className="mx-1 h-4 w-px bg-zinc-200" />
+
+            <ToolbarButton
+              onClick={insertLatexBlock}
+              active={editor.isActive("latexBlock")}
+              title="Insert display math (LaTeX). Double-click to edit."
+            >
+              <Sigma size={15} />
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={insertLatexInline}
+              active={editor.isActive("latexInline")}
+              title="Insert inline math (LaTeX). Double-click to edit."
+            >
+              <Superscript size={15} />
+            </ToolbarButton>
+            </div>
+
+            <span
+              className="shrink-0 px-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-500"
+              title="Word count (body text; math nodes are not counted)"
+            >
+              {wordCount} {wordCount === 1 ? "word" : "words"}
+            </span>
             </div>
 
             {showLinkInput ? (
@@ -664,6 +734,9 @@ export default function ArticleEditor({
             "[&_.ProseMirror_img.ProseMirror-selectednode]:outline",
             "[&_.ProseMirror_img.ProseMirror-selectednode]:outline-2",
             "[&_.ProseMirror_img.ProseMirror-selectednode]:outline-cyan-600",
+            // KaTeX in editor
+            "[&_.ProseMirror_.katex-display]:my-2",
+            "[&_.ProseMirror_.katex]:text-inherit",
             // Drop zone highlight while dragging
             isUploading && "[&_.ProseMirror]:opacity-60"
           )}

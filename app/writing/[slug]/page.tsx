@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Container } from "@/components/ui";
+import { ArticleHtmlBody } from "@/components/writing/ArticleHtmlBody";
 import { getWritingPostBySlug } from "@/lib/writing/queries";
 
 export const dynamic = "force-dynamic";
@@ -67,9 +68,9 @@ export default async function WritingPostPage({ params }: Props) {
             </div>
           ) : null}
 
-          <div
+          <ArticleHtmlBody
+            html={post.content}
             className={`prose prose-zinc prose-lg max-w-3xl ${post.coverImageUrl ? "mt-10" : "mt-14"}`}
-            dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           {post.writtenBy ? (
