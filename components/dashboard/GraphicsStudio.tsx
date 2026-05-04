@@ -18,6 +18,8 @@ import {
   Download,
   GitBranch,
   Grid3x3,
+  Layers,
+  MessageSquare,
   Minus,
   Plus,
   PlusCircle,
@@ -35,7 +37,24 @@ import {
   type ReactNode,
 } from "react";
 import { Bar } from "react-chartjs-2";
+import { GraphicsAssistPanel } from "@/components/dashboard/GraphicsAssistPanel";
+import {
+  nid,
+  parseBarPaste,
+  parseDotPaste,
+  parseMatrixPaste,
+  parseFlowPaste,
+  type BarRow,
+  type DotRow,
+  type FlowEdge,
+  type FlowNode,
+  type FlowShape,
+  type MatrixCol,
+  type MatrixRow,
+} from "@/lib/graphics-paste-parsers";
 import { cn } from "@/lib/utils";
+
+export type { FlowNode, FlowEdge, FlowShape } from "@/lib/graphics-paste-parsers";
 
 /** Editorial research chart tokens (do not substitute near-greens / near-corals). */
 const TOK = {
@@ -372,336 +391,10 @@ async function flowCompositeToPngBlob(
 
 type TabId = "bar" | "dot" | "flow" | "matrix";
 
+/** Top-level studio area: chart editors vs LLM assist. */
+type StudioSectionTab = "graphics" | "assist";
+
 type DataEntryMode = "manual" | "paste";
-
-type MatrixCol = { id: string; label: string };
-type MatrixRow = { id: string; label: string; cells: number[] };
-
-type BarRow = { id: string; label: string; c: number; d: number };
-type DotRow = {
-  id: string;
-  label: string;
-  baseline: number;
-  dPrime: number;
-  cPrime: number;
-};
-
-type FlowShape = "round" | "rect" | "diamond";
-export type FlowNode = {
-  id: string;
-  label: string;
-  shape: FlowShape;
-};
-export type FlowEdge = { id: string; fromId: string; toId: string; label: string };
-
-let idSeq = 0;
-function nid(prefix: string) {
-  idSeq += 1;
-  return `${prefix}_${idSeq}_${Math.random().toString(36).slice(2, 6)}`;
-}
-
-/** Tab-separated preferred; otherwise comma-separated (no embedded commas in cells). */
-function splitDataLine(line: string): string[] {
-  const t = line.trim();
-  if (!t) return [];
-  if (t.includes("\t")) return t.split("\t").map((s) => s.trim());
-  return t.split(",").map((s) => s.trim());
-}
-
-function parseNumberLoose(s: string): number | null {
-  const n = Number(String(s).replace(/,/g, "").trim());
-  return Number.isFinite(n) ? n : null;
-}
-
-function clampScore01(s: string): number | null {
-  const n = Math.round(Number(s.trim()));
-  if (!Number.isFinite(n)) return null;
-  if (n < 0 || n > 2) return null;
-  return n;
-}
-
-type BarPasteResult =
-  | { ok: true; rows: BarRow[]; legendC?: string; legendD?: string }
-  | { ok: false; error: string };
-
-function parseBarPaste(text: string): BarPasteResult {
-  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-  if (!lines.length) return { ok: false, error: "Paste at least one data row." };
-
-  let i0 = 0;
-  let legendC: string | undefined;
-  let legendD: string | undefined;
-  const head = splitDataLine(lines[0]);
-  if (head.length >= 3) {
-    const n1 = parseNumberLoose(head[1]);
-    const n2 = parseNumberLoose(head[2]);
-    if (n1 === null || n2 === null) {
-      legendC = head[1] || undefined;
-      legendD = head[2] || undefined;
-      i0 = 1;
-    }
-  }
-
-  const rows: BarRow[] = [];
-  for (let i = i0; i < lines.length; i++) {
-    const p = splitDataLine(lines[i]);
-    if (p.length < 3) {
-      return {
-        ok: false,
-        error: `Line ${i + 1}: need 3 columns — label, first series, second series (tab or comma).`,
-      };
-    }
-    const c = parseNumberLoose(p[1]);
-    const d = parseNumberLoose(p[2]);
-    if (c === null || d === null) {
-      return {
-        ok: false,
-        error: `Line ${i + 1}: columns 2 and 3 must be numbers (got "${p[1]}", "${p[2]}").`,
-      };
-    }
-    rows.push({
-      id: nid("br"),
-      label: p[0] || `Category ${i + 1}`,
-      c: Math.round(c),
-      d: Math.round(d),
-    });
-  }
-  if (!rows.length) return { ok: false, error: "No numeric data rows found." };
-  return { ok: true, rows, legendC, legendD };
-}
-
-type DotPasteResult =
-  | { ok: true; rows: DotRow[] }
-  | { ok: false; error: string };
-
-function normHeaderCell(s: string): string {
-  return s
-    .toLowerCase()
-    .replace(/['′`]/g, "")
-    .replace(/[^a-z0-9]+/g, "");
-}
-
-function parseDotPaste(text: string): DotPasteResult {
-  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-  if (!lines.length) return { ok: false, error: "Paste at least one row." };
-
-  const head = splitDataLine(lines[0]);
-  let labelIdx = 0;
-  let bIdx = 1;
-  let dIdx = 2;
-  let cIdx = 3;
-  let start = 0;
-
-  if (head.length >= 4) {
-    const map = new Map<string, number>();
-    head.forEach((h, j) => map.set(normHeaderCell(h), j));
-    const hasNum = head.slice(1).some((h) => parseNumberLoose(h) !== null);
-    if (!hasNum) {
-      start = 1;
-      labelIdx = map.get("label") ?? map.get("row") ?? map.get("name") ?? 0;
-      bIdx = map.get("baseline") ?? map.get("base") ?? 1;
-      dIdx = map.get("dprime") ?? map.get("d") ?? 2;
-      cIdx = map.get("cprime") ?? map.get("c") ?? 3;
-    }
-  }
-
-  const rows: DotRow[] = [];
-  for (let i = start; i < lines.length; i++) {
-    const p = splitDataLine(lines[i]);
-    if (p.length < 4) {
-      return {
-        ok: false,
-        error: `Line ${i + 1}: need 4 values — label, baseline, D′, C′ (tab or comma).`,
-      };
-    }
-    const label = (p[labelIdx] ?? "").trim() || `Row ${i + 1}`;
-    const b = parseNumberLoose(p[bIdx] ?? "");
-    const d = parseNumberLoose(p[dIdx] ?? "");
-    const c = parseNumberLoose(p[cIdx] ?? "");
-    if (b === null || d === null || c === null) {
-      return {
-        ok: false,
-        error: `Line ${i + 1}: baseline, D′, and C′ must be numbers.`,
-      };
-    }
-    rows.push({
-      id: nid("dr"),
-      label,
-      baseline: Math.round(b),
-      dPrime: Math.round(d),
-      cPrime: Math.round(c),
-    });
-  }
-  if (!rows.length) return { ok: false, error: "No data rows found." };
-  return { ok: true, rows };
-}
-
-type MatrixPasteResult =
-  | { ok: true; cols: MatrixCol[]; rows: MatrixRow[] }
-  | { ok: false; error: string };
-
-function parseMatrixPaste(text: string): MatrixPasteResult {
-  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-  if (lines.length < 2) {
-    return {
-      ok: false,
-      error: "Need a header row (column names) and at least one data row.",
-    };
-  }
-  const header = splitDataLine(lines[0]);
-  if (header.length < 2) {
-    return {
-      ok: false,
-      error: "Header row needs a row-label column plus one or more phase columns.",
-    };
-  }
-  const colLabels = header.slice(1).map((c, j) => c || `Column ${j + 1}`);
-  const cols: MatrixCol[] = colLabels.map((label) => ({ id: nid("mc"), label }));
-
-  const rows: MatrixRow[] = [];
-  for (let i = 1; i < lines.length; i++) {
-    const p = splitDataLine(lines[i]);
-    if (p.length !== colLabels.length + 1) {
-      return {
-        ok: false,
-        error: `Line ${i + 1}: expected ${colLabels.length + 1} columns (row label + ${colLabels.length} scores), got ${p.length}.`,
-      };
-    }
-    const label = (p[0] ?? "").trim() || `Row ${i}`;
-    const cells: number[] = [];
-    for (let j = 1; j < p.length; j++) {
-      const sc = clampScore01(p[j] ?? "");
-      if (sc === null) {
-        return {
-          ok: false,
-          error: `Line ${i + 1}, column ${j + 1}: score must be 0, 1, or 2 (got "${p[j]}").`,
-        };
-      }
-      cells.push(sc);
-    }
-    rows.push({ id: nid("mr"), label, cells });
-  }
-  if (!rows.length) return { ok: false, error: "No data rows." };
-  return { ok: true, cols, rows };
-}
-
-type FlowPasteResult =
-  | { ok: true; direction: "LR" | "TB"; nodes: FlowNode[]; edges: FlowEdge[] }
-  | { ok: false; error: string };
-
-function parseShape(s: string): FlowShape | null {
-  const x = s.toLowerCase().trim();
-  if (x === "round" || x === "terminal" || x === "capsule") return "round";
-  if (x === "rect" || x === "rectangle" || x === "box") return "rect";
-  if (x === "diamond" || x === "decision") return "diamond";
-  return null;
-}
-
-function parseFlowPaste(text: string): FlowPasteResult {
-  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-  if (!lines.length) return { ok: false, error: "Paste at least one line." };
-
-  let direction: "LR" | "TB" = "LR";
-  const nodeDraft: { id: string; label: string; shape: FlowShape }[] = [];
-  const edgeDraft: { fromId: string; toId: string; label: string }[] = [];
-
-  for (let i = 0; i < lines.length; i++) {
-    const p = splitDataLine(lines[i]);
-    if (!p.length) continue;
-
-    if (p.length === 1 && (p[0] === "LR" || p[0] === "TB")) {
-      direction = p[0];
-      continue;
-    }
-    if (p[0].toUpperCase() === "D" && p[1] && (p[1] === "LR" || p[1] === "TB")) {
-      direction = p[1] as "LR" | "TB";
-      continue;
-    }
-
-    if (p[0].toUpperCase() === "N") {
-      if (p.length === 4) {
-        const id = (p[1] ?? "").trim() || nid("fn");
-        const label = (p[2] ?? "").trim() || "Step";
-        const shape = parseShape(p[3] ?? "");
-        if (!shape) {
-          return {
-            ok: false,
-            error: `Line ${i + 1}: unknown shape "${p[3]}" (use round, rect, or diamond).`,
-          };
-        }
-        nodeDraft.push({ id, label, shape });
-      } else if (p.length === 3) {
-        const label = (p[1] ?? "").trim() || "Step";
-        const shape = parseShape(p[2] ?? "");
-        if (!shape) {
-          return {
-            ok: false,
-            error: `Line ${i + 1}: unknown shape "${p[2]}" (use round, rect, or diamond).`,
-          };
-        }
-        nodeDraft.push({ id: nid("fn"), label, shape });
-      } else {
-        return {
-          ok: false,
-          error: `Line ${i + 1}: use "N\\tlabel\\tshape" or "N\\tid\\tlabel\\tshape".`,
-        };
-      }
-      continue;
-    }
-
-    if (p[0].toUpperCase() === "E") {
-      if (p.length < 3) {
-        return {
-          ok: false,
-          error: `Line ${i + 1}: use "E\\tfromNodeId\\ttoNodeId\\toptionalEdgeLabel".`,
-        };
-      }
-      edgeDraft.push({
-        fromId: (p[1] ?? "").trim(),
-        toId: (p[2] ?? "").trim(),
-        label: (p[3] ?? "").trim(),
-      });
-      continue;
-    }
-
-    return {
-      ok: false,
-      error: `Line ${i + 1}: unknown row — use D (direction), N (node), or E (edge). See hint below.`,
-    };
-  }
-
-  if (!nodeDraft.length) {
-    return { ok: false, error: "Add at least one node line starting with N." };
-  }
-
-  const nodes: FlowNode[] = nodeDraft.map((n) => ({ ...n }));
-  const idSet = new Set(nodes.map((n) => n.id));
-  if (idSet.size !== nodes.length) {
-    return { ok: false, error: "Duplicate node ids — each N line id must be unique." };
-  }
-
-  const edges: FlowEdge[] = [];
-  for (let k = 0; k < edgeDraft.length; k++) {
-    const e = edgeDraft[k];
-    if (!e.fromId || !e.toId) {
-      return { ok: false, error: `Edge ${k + 1}: from and to ids cannot be empty.` };
-    }
-    if (!idSet.has(e.fromId)) {
-      return { ok: false, error: `Edge ${k + 1}: no node with id "${e.fromId}".` };
-    }
-    if (!idSet.has(e.toId)) {
-      return { ok: false, error: `Edge ${k + 1}: no node with id "${e.toId}".` };
-    }
-    edges.push({
-      id: nid("fe"),
-      fromId: e.fromId,
-      toId: e.toId,
-      label: e.label,
-    });
-  }
-
-  return { ok: true, direction, nodes, edges };
-}
 
 const PASTE_PLACEHOLDER_BAR = `Quarter\tSeries A\tSeries B
 Q1\t42\t33
@@ -1054,6 +747,7 @@ export function GraphicsStudio() {
   ];
 
   const [tab, setTab] = useState<TabId>("bar");
+  const [studioSection, setStudioSection] = useState<StudioSectionTab>("graphics");
   const [copied, setCopied] = useState<null | "bar" | "dot" | "flow" | "matrix">(
     null
   );
@@ -1210,6 +904,55 @@ export function GraphicsStudio() {
     setPasteFlow("");
     setFlowDataMode("manual");
   }, [pasteFlow]);
+
+  const applyAssistTsv = useCallback(
+    (tsv: string) => {
+      if (tab === "bar") {
+        setPasteBarErr(null);
+        const r = parseBarPaste(tsv);
+        if (!r.ok) {
+          setPasteBarErr(r.error);
+          return;
+        }
+        setBarRows(r.rows);
+        if (r.legendC) setBarLegendC(r.legendC);
+        if (r.legendD) setBarLegendD(r.legendD);
+        setBarDataMode("manual");
+      } else if (tab === "dot") {
+        setPasteDotErr(null);
+        const r = parseDotPaste(tsv);
+        if (!r.ok) {
+          setPasteDotErr(r.error);
+          return;
+        }
+        setDotRows(r.rows);
+        setDotDataMode("manual");
+      } else if (tab === "matrix") {
+        setPasteMatrixErr(null);
+        const r = parseMatrixPaste(tsv);
+        if (!r.ok) {
+          setPasteMatrixErr(r.error);
+          return;
+        }
+        setMatrixCols(r.cols);
+        setMatrixRows(r.rows);
+        setMatrixDataMode("manual");
+      } else {
+        setPasteFlowErr(null);
+        const r = parseFlowPaste(tsv);
+        if (!r.ok) {
+          setPasteFlowErr(r.error);
+          return;
+        }
+        setFlowDirection(r.direction);
+        setFlowNodes(r.nodes);
+        setFlowEdges(r.edges);
+        setEdgeDraft({ fromId: "", toId: "", label: "" });
+        setFlowDataMode("manual");
+      }
+    },
+    [tab]
+  );
 
   const barParsed = useMemo(
     () => ({
@@ -1426,23 +1169,30 @@ export function GraphicsStudio() {
     const xTickLabelY = hasTitle ? 46 : 12;
     const padBottom =
       28 + (dotXL.trim() ? 22 : 0) + (dotFoot.trim() ? 30 : 0);
-    const padX = 56;
+    /** Left strip for vertical Y caption ("Trials"); row labels sit to its right, never under the plot. */
+    const yCaptionStrip = dotYL.trim() ? 36 : 0;
+    /** Reserved width for row names (right-aligned); keeps dots / zero line off label text. */
+    const labelColumnW = 212;
+    const plotRightPad = 48;
+    const w = 720;
+    const plotLeft = yCaptionStrip + labelColumnW;
     const rowH = 44;
     const h = padTop + Math.max(parsedDots.length, 1) * rowH + padBottom + 24;
-    const w = 640;
-    const plotW = w - padX * 2;
+    const plotW = Math.max(140, w - plotLeft - plotRightPad);
     const vals = parsedDots.flatMap((r) => [r.baseline, r.dPrime, r.cPrime]);
     const vmin = vals.length ? Math.min(0, ...vals) : 0;
     const vmax = vals.length ? Math.max(100, ...vals) : 100;
     const span = vmax - vmin || 1;
 
-    const xFor = (v: number) => padX + ((v - vmin) / span) * plotW;
+    const xFor = (v: number) => plotLeft + ((v - vmin) / span) * plotW;
 
     return (
       <svg
         id="dashboard-dot-svg"
+        className="mx-auto block w-full max-w-[720px]"
         width="100%"
         viewBox={`0 0 ${w} ${h}`}
+        preserveAspectRatio="xMidYMid meet"
         aria-label={dotTitle || "Dot plot visualization"}
       >
         <title>{dotTitle || "Dot plot"}</title>
@@ -1487,13 +1237,13 @@ export function GraphicsStudio() {
         )}
         {dotYL.trim() && (
           <text
-            x={12}
+            x={Math.max(12, yCaptionStrip / 2)}
             y={padTop + (parsedDots.length * rowH) / 2}
             fill={TOK.textPrimary}
             fontSize={12}
             fontWeight={500}
             fontFamily={FONT_SANS}
-            transform={`rotate(-90 12 ${padTop + (parsedDots.length * rowH) / 2})`}
+            transform={`rotate(-90 ${Math.max(12, yCaptionStrip / 2)} ${padTop + (parsedDots.length * rowH) / 2})`}
           >
             {dotYL}
           </text>
@@ -1515,8 +1265,9 @@ export function GraphicsStudio() {
                 strokeWidth={4}
               />
               <text
-                x={dotYL.trim() ? 28 : padX / 2 + 14}
+                x={plotLeft - 12}
                 y={cy}
+                textAnchor="end"
                 dominantBaseline="middle"
                 fill={TOK.textPrimary}
                 fontSize={13}
@@ -1610,8 +1361,10 @@ export function GraphicsStudio() {
     return (
       <svg
         id="dashboard-matrix-svg"
+        className="mx-auto block w-full max-w-[780px]"
         width="100%"
         viewBox={`0 0 ${w} ${h}`}
+        preserveAspectRatio="xMidYMid meet"
         aria-label={matrixTitle || "Lifecycle matrix"}
       >
         <title>{matrixTitle || "Lifecycle matrix"}</title>
@@ -1856,6 +1609,52 @@ export function GraphicsStudio() {
     }
   }, [flashCopied]);
 
+  const downloadDotPng = useCallback(async () => {
+    const el = document.getElementById("dashboard-dot-svg");
+    if (!el || !(el instanceof SVGSVGElement)) return;
+    ensureSvgOpaqueWhiteRoot(el);
+    try {
+      const blob = await rasterizeSvgToPngBlob(el);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "dot-plot@2x.png";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("Could not save PNG.");
+    }
+  }, []);
+
+  const copyDotPng = useCallback(async () => {
+    const el = document.getElementById("dashboard-dot-svg");
+    if (!el || !(el instanceof SVGSVGElement)) return;
+    ensureSvgOpaqueWhiteRoot(el);
+    if (typeof ClipboardItem === "undefined") return;
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "image/png": (async () => rasterizeSvgToPngBlob(el))(),
+        }),
+      ]);
+      flashCopied("dot");
+    } catch {
+      try {
+        const blob = await rasterizeSvgToPngBlob(el);
+        const dl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = dl;
+        a.download = "dot-plot@2x.png";
+        a.click();
+        URL.revokeObjectURL(dl);
+        alert("Clipboard blocked — downloaded dot-plot@2x.png instead.");
+      } catch {
+        alert("Could not copy or save PNG.");
+      }
+    }
+  }, [flashCopied]);
+
   const matrixSvgExport = useCallback(() => {
     const el = document.getElementById("dashboard-matrix-svg");
     if (!el || !(el instanceof SVGSVGElement)) return;
@@ -2066,11 +1865,13 @@ export function GraphicsStudio() {
               </h1>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" role="tablist" aria-label="Graphic type">
               {tabs.map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
                   type="button"
+                  role="tab"
+                  aria-selected={tab === id}
                   onClick={() => setTab(id)}
                   className={cn(
                     "inline-flex items-center gap-2 border px-4 py-2 font-sans text-[13px] font-medium transition-colors",
@@ -2086,10 +1887,70 @@ export function GraphicsStudio() {
               ))}
             </div>
           </div>
+
+          <div
+            className="mt-5 flex flex-wrap gap-2 border-t pt-5"
+            style={{ borderColor: BORDER_TIGHT }}
+            role="tablist"
+            aria-label="Studio section"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={studioSection === "graphics"}
+              id="studio-section-tab-graphics"
+              aria-controls="studio-section-panel-graphics"
+              onClick={() => setStudioSection("graphics")}
+              className={cn(
+                "inline-flex items-center gap-2 border px-4 py-2 font-sans text-[13px] font-medium transition-colors",
+                RAD.outer,
+                studioSection === "graphics"
+                  ? "border-[#8B5A2B] bg-[#8B5A2B] text-white"
+                  : "border-[#E8E4DC] bg-white text-zinc-800 hover:border-[#8B5A2B]/40"
+              )}
+            >
+              <Layers className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+              Graphics
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={studioSection === "assist"}
+              id="studio-section-tab-assist"
+              aria-controls="studio-section-panel-assist"
+              onClick={() => setStudioSection("assist")}
+              className={cn(
+                "inline-flex items-center gap-2 border px-4 py-2 font-sans text-[13px] font-medium transition-colors",
+                RAD.outer,
+                studioSection === "assist"
+                  ? "border-[#8B5A2B] bg-[#8B5A2B] text-white"
+                  : "border-[#E8E4DC] bg-white text-zinc-800 hover:border-[#8B5A2B]/40"
+              )}
+            >
+              <MessageSquare className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+              Data assist
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-6xl px-6 py-10">
+        {studioSection === "assist" ? (
+          <div
+            id="studio-section-panel-assist"
+            role="tabpanel"
+            aria-labelledby="studio-section-tab-assist"
+          >
+            <GraphicsAssistPanel chartKind={tab} onApplyTsv={applyAssistTsv} />
+          </div>
+        ) : null}
+
+        {studioSection === "graphics" ? (
+          <div
+            id="studio-section-panel-graphics"
+            role="tabpanel"
+            aria-labelledby="studio-section-tab-graphics"
+          >
         {tab === "bar" && (
           <section className={cn("border bg-white p-6", RAD.outer)} style={{ borderColor: BORDER_TIGHT }}>
             <div style={{ borderTop: `3px solid ${TOK.barPrimary}`, marginTop: -1, paddingTop: 2 }}>
@@ -2239,7 +2100,7 @@ export function GraphicsStudio() {
               </div>
 
               <div
-                className="mt-6 aspect-[16/9] max-h-[320px] min-h-[220px] w-full border bg-white px-2 py-2"
+                className="mt-6 flex aspect-[16/9] max-h-[320px] min-h-[220px] w-full items-center justify-center border bg-white px-2 py-2"
                 style={{ borderColor: TOK.cardBorder }}
               >
                 {barParsed.labels.length > 0 ? (
@@ -2317,9 +2178,11 @@ export function GraphicsStudio() {
 
             <div className="mt-8 grid gap-8 lg:grid-cols-[1fr,minmax(0,420px)]">
               <div>
-                <div className={cn("border", RAD.outer)} style={{ borderColor: BORDER_TIGHT, overflow: "auto" }}>
+                <div className={cn("border", RAD.outer)} style={{ borderColor: BORDER_TIGHT, overflow: "hidden" }}>
                   <div className="p-4">
-                    <div className="-mx-1 overflow-auto">{dotVisualization}</div>
+                    <div className="flex w-full justify-center">
+                      <div className="w-full min-w-0 max-w-[720px]">{dotVisualization}</div>
+                    </div>
                   </div>
                   <div
                     className="flex flex-wrap gap-6 border-t px-4 py-3 font-sans uppercase"
@@ -2366,6 +2229,31 @@ export function GraphicsStudio() {
                       title="Copy SVG markup (opaque white background)"
                     >
                       <Copy className="size-4" aria-hidden /> Copy SVG
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void downloadDotPng()}
+                      className="inline-flex items-center gap-2 border px-3 py-2 font-sans text-xs font-medium"
+                      style={{
+                        borderColor: TOK.cardBorder,
+                        background: TOK.pageBg,
+                        color: TOK.textPrimary,
+                      }}
+                      disabled={!parsedDots.length}
+                    >
+                      <Download className="size-4" aria-hidden /> PNG @2×
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void copyDotPng()}
+                      className="inline-flex items-center gap-2 border bg-white px-3 py-2 font-sans text-xs font-medium text-zinc-800"
+                      style={{ borderColor: BORDER_TIGHT }}
+                      disabled={
+                        !parsedDots.length || typeof ClipboardItem === "undefined"
+                      }
+                      title="Copy raster image (PNG, solid white background)"
+                    >
+                      <Copy className="size-4" aria-hidden /> Copy PNG
                     </button>
                     {copied === "dot" ? (
                       <span className="text-xs font-medium text-emerald-800">Copied</span>
@@ -2536,7 +2424,9 @@ export function GraphicsStudio() {
               >
                 <div className="p-4" style={{ background: TOK.pageBg }}>
                   <div className="overflow-auto rounded-none border bg-white p-3" style={{ borderColor: TOK.cardBorder }}>
-                    {matrixVisualization}
+                    <div className="flex w-full justify-center">
+                      <div className="w-full min-w-0 max-w-[780px]">{matrixVisualization}</div>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -2897,7 +2787,10 @@ export function GraphicsStudio() {
                       </div>
                     ) : null}
                     <div className="min-h-[280px] min-w-0 flex-1 overflow-auto px-4 py-6 md:px-8 md:py-8">
-                      <div ref={flowWrapRef} className="min-h-[240px]" />
+                      <div
+                        ref={flowWrapRef}
+                        className="flex min-h-[240px] w-full justify-center [&>svg]:mx-auto [&>svg]:block [&>svg]:h-auto [&>svg]:max-w-full"
+                      />
                     </div>
                   </div>
                 </div>
@@ -3246,6 +3139,8 @@ export function GraphicsStudio() {
             </div>
           </section>
         )}
+          </div>
+        ) : null}
       </div>
     </div>
   );
