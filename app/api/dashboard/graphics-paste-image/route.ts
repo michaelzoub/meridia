@@ -1,15 +1,17 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { buildAssistSystemPrompt } from "@/lib/graphics-assist-prompts";
+import { buildImageExtractSystemPrompt } from "@/lib/graphics-assist-prompts";
 import { extractTsvFromModelJson } from "@/lib/extract-tsv-from-model-json";
 import {
   validatePasteForChart,
   type ChartPasteKind,
 } from "@/lib/graphics-paste-parsers";
 
-const MAX_MESSAGE_CHARS = 6000;
+/** Same default as text assist; must support vision (e.g. gpt-4o-mini). */
 const MODEL = process.env.OPENAI_GRAPHICS_MODEL ?? "gpt-4o-mini";
+/** ~10 MiB raw base64 payload guard */
+const MAX_BASE64_CHARS = 14_000_000;
 
 export async function POST(req: NextRequest) {
   const cookieStore = await cookies();
@@ -26,7 +28,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { chartKind?: string; message?: string };
+  let body: {
+    chartKind?: string;
+    imageBase64?: string;
+    mimeType?: string;
+  };
   try {
     body = await req.json();
   } catch {
@@ -34,22 +40,30 @@ export async function POST(req: NextRequest) {
   }
 
   const chartKind = body.chartKind as ChartPasteKind | undefined;
-  const message = typeof body.message === "string" ? body.message : "";
   const kinds: ChartPasteKind[] = ["bar", "dot", "matrix", "flow"];
   if (!chartKind || !kinds.includes(chartKind)) {
     return NextResponse.json({ error: "Invalid chartKind" }, { status: 400 });
   }
-  if (!message.trim()) {
-    return NextResponse.json({ error: "Message required" }, { status: 400 });
+
+  const imageBase64 =
+    typeof body.imageBase64 === "string" ? body.imageBase64.trim() : "";
+  if (!imageBase64.length) {
+    return NextResponse.json({ error: "imageBase64 required" }, { status: 400 });
   }
-  if (message.length > MAX_MESSAGE_CHARS) {
+  if (imageBase64.length > MAX_BASE64_CHARS) {
     return NextResponse.json(
-      { error: `Message too long (max ${MAX_MESSAGE_CHARS})` },
+      { error: "Image too large — try a smaller screenshot." },
       { status: 400 }
     );
   }
 
-  const userContent = `Chart kind: ${chartKind}\n\nUser request:\n${message.trim()}`;
+  const mimeRaw = typeof body.mimeType === "string" ? body.mimeType.trim() : "";
+  const mimeType =
+    mimeRaw && /^image\/(png|jpe?g|gif|webp)$/i.test(mimeRaw)
+      ? mimeRaw.toLowerCase().replace("image/jpg", "image/jpeg")
+      : "image/png";
+
+  const dataUrl = `data:${mimeType};base64,${imageBase64}`;
 
   const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -59,21 +73,33 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       model: MODEL,
-      temperature: 0.2,
-      max_completion_tokens: 1024,
+      temperature: 0.1,
+      max_completion_tokens: 4096,
       response_format: { type: "json_object" },
       messages: [
-        { role: "system", content: buildAssistSystemPrompt(chartKind) },
-        { role: "user", content: userContent },
+        { role: "system", content: buildImageExtractSystemPrompt(chartKind) },
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `Chart kind: ${chartKind}\nExtract paste-ready TSV from this image.`,
+            },
+            {
+              type: "image_url",
+              image_url: { url: dataUrl },
+            },
+          ],
+        },
       ],
     }),
   });
 
   if (!openaiRes.ok) {
     const errText = await openaiRes.text();
-    console.warn("[graphics-assist] OpenAI error", openaiRes.status);
+    console.warn("[graphics-paste-image] OpenAI error", openaiRes.status);
     return NextResponse.json(
-      { error: "Assistant request failed", detail: errText.slice(0, 240) },
+      { error: "Image extract request failed", detail: errText.slice(0, 240) },
       { status: 502 }
     );
   }
@@ -84,7 +110,7 @@ export async function POST(req: NextRequest) {
   const rawContent = completion.choices?.[0]?.message?.content ?? "";
   const tsvExtracted = extractTsvFromModelJson(rawContent);
   if (tsvExtracted === null) {
-    console.warn("[graphics-assist] bad JSON shape");
+    console.warn("[graphics-paste-image] bad JSON shape");
     return NextResponse.json(
       { error: "Model did not return valid JSON with a tsv string." },
       { status: 422 }
@@ -93,13 +119,13 @@ export async function POST(req: NextRequest) {
 
   const validated = validatePasteForChart(chartKind, tsvExtracted);
   if (!validated.ok) {
-    console.warn("[graphics-assist] parse failed", chartKind);
+    console.warn("[graphics-paste-image] parse failed", chartKind);
     return NextResponse.json(
-      { error: "Generated data failed validation", detail: validated.error },
+      { error: "Extracted data failed validation", detail: validated.error },
       { status: 422 }
     );
   }
 
-  console.info("[graphics-assist] ok", chartKind);
+  console.info("[graphics-paste-image] ok", chartKind);
   return NextResponse.json({ ok: true, tsv: tsvExtracted });
 }

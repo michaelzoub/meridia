@@ -18,7 +18,9 @@ import {
   Download,
   GitBranch,
   Grid3x3,
+  ImagePlus,
   Layers,
+  Loader2,
   MessageSquare,
   Minus,
   Plus,
@@ -34,6 +36,8 @@ import {
   useMemo,
   useRef,
   useState,
+  type ClipboardEvent,
+  type DragEvent,
   type ReactNode,
 } from "react";
 import { Bar } from "react-chartjs-2";
@@ -45,6 +49,7 @@ import {
   parseMatrixPaste,
   parseFlowPaste,
   type BarRow,
+  type ChartPasteKind,
   type DotRow,
   type FlowEdge,
   type FlowNode,
@@ -621,6 +626,23 @@ function DataEntryModeTabs({
   );
 }
 
+function fileToBase64Payload(file: File): Promise<{ base64: string; mimeType: string }> {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const s = r.result as string;
+      const m = /^data:([^;]+);base64,([\s\S]*)$/.exec(s);
+      if (!m) {
+        reject(new Error("Could not read image."));
+        return;
+      }
+      resolve({ mimeType: m[1], base64: m[2] });
+    };
+    r.onerror = () => reject(new Error("Could not read file."));
+    r.readAsDataURL(file);
+  });
+}
+
 function PasteDataBlock({
   id,
   hint,
@@ -631,6 +653,7 @@ function PasteDataBlock({
   onClear,
   error,
   embedded,
+  chartKind,
 }: {
   id: string;
   hint: ReactNode;
@@ -642,11 +665,113 @@ function PasteDataBlock({
   error: string | null;
   /** When true, omit top rule and “Paste data” title (shown under Paste tab). */
   embedded?: boolean;
+  /** When set, enables clipboard/drop/file image → server vision extract into the field. */
+  chartKind?: ChartPasteKind;
 }) {
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const imageImportId = useId().replace(/:/g, "");
+  const [imageBusy, setImageBusy] = useState(false);
+  const [imageErr, setImageErr] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+
+  const extractFromImageFile = useCallback(
+    async (file: File) => {
+      if (!chartKind) return;
+      if (!file.type.startsWith("image/")) {
+        setImageErr("Choose an image file (PNG, JPEG, GIF, or WebP).");
+        return;
+      }
+      setImageErr(null);
+      setImageBusy(true);
+      try {
+        const { base64, mimeType } = await fileToBase64Payload(file);
+        const res = await fetch("/api/dashboard/graphics-paste-image", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chartKind, imageBase64: base64, mimeType }),
+        });
+        const data = (await res.json()) as {
+          ok?: boolean;
+          tsv?: string;
+          error?: string;
+          detail?: string;
+        };
+        if (!res.ok) {
+          const detail =
+            typeof data.detail === "string" && data.detail.trim()
+              ? data.detail
+              : undefined;
+          throw new Error(detail || data.error || `Request failed (${res.status})`);
+        }
+        if (!data.ok || typeof data.tsv !== "string") {
+          throw new Error("Unexpected response from server.");
+        }
+        onChange(data.tsv);
+      } catch (e) {
+        setImageErr(e instanceof Error ? e.message : "Image extract failed.");
+      } finally {
+        setImageBusy(false);
+      }
+    },
+    [chartKind, onChange]
+  );
+
+  const onPasteImage = useCallback(
+    (e: ClipboardEvent<HTMLElement>) => {
+      if (!chartKind || imageBusy) return;
+      const items = e.clipboardData?.items;
+      if (!items?.length) return;
+      for (let i = 0; i < items.length; i++) {
+        const it = items[i];
+        if (it.kind === "file" && it.type.startsWith("image/")) {
+          const f = it.getAsFile();
+          if (f) {
+            e.preventDefault();
+            void extractFromImageFile(f);
+          }
+          return;
+        }
+      }
+    },
+    [chartKind, imageBusy, extractFromImageFile]
+  );
+
+  const onDragOver = useCallback((e: DragEvent<HTMLElement>) => {
+    if (!chartKind || imageBusy) return;
+    if ([...e.dataTransfer.types].includes("Files")) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+      setDragActive(true);
+    }
+  }, [chartKind, imageBusy]);
+
+  const onDragLeave = useCallback((e: DragEvent<HTMLElement>) => {
+    const next = e.relatedTarget as Node | null;
+    if (next && e.currentTarget.contains(next)) return;
+    setDragActive(false);
+  }, []);
+
+  const onDrop = useCallback(
+    (e: DragEvent<HTMLElement>) => {
+      if (!chartKind || imageBusy) return;
+      e.preventDefault();
+      setDragActive(false);
+      const files = e.dataTransfer.files;
+      const first = files?.[0];
+      if (first) void extractFromImageFile(first);
+    },
+    [chartKind, imageBusy, extractFromImageFile]
+  );
+
   return (
     <div
       className={cn(embedded ? "mt-0" : "mt-6 border-t pt-4")}
       style={embedded ? undefined : { borderColor: BORDER_TIGHT }}
+      onPaste={chartKind ? onPasteImage : undefined}
+      onDragOver={chartKind ? onDragOver : undefined}
+      onDragLeave={chartKind ? onDragLeave : undefined}
+      onDrop={chartKind ? onDrop : undefined}
     >
       {!embedded ? (
         <span className={labelSpanStyle}>Paste data</span>
@@ -657,6 +782,65 @@ function PasteDataBlock({
       >
         {hint}
       </div>
+      {chartKind ? (
+        <p className="mt-2 text-[12px] leading-relaxed" style={{ color: "rgba(139, 90, 43, 0.75)" }}>
+          <strong>Image:</strong> paste a screenshot (⌘V / Ctrl+V), drop a file here, or import — text
+          fills the box below (uses the same validation as typed paste; requires{" "}
+          <code className="font-mono text-[11px]">OPENAI_API_KEY</code> on the server).
+        </p>
+      ) : null}
+      {chartKind ? (
+        <div
+          className={cn(
+            "mt-3 border border-dashed px-3 py-3 font-sans text-[12px] transition-colors",
+            RAD.outer,
+            dragActive ? "bg-[#fcf8f3]" : "bg-white"
+          )}
+          style={{
+            borderColor: dragActive ? TOK.textPrimary : TOK.cardBorder,
+            color: TOK.textSecondary,
+          }}
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <input
+              ref={imageInputRef}
+              id={`${id}-image-import-${imageImportId}`}
+              type="file"
+              accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+              className="sr-only"
+              tabIndex={-1}
+              disabled={imageBusy}
+              onChange={(ev) => {
+                const f = ev.target.files?.[0];
+                ev.target.value = "";
+                if (f) void extractFromImageFile(f);
+              }}
+            />
+            <button
+              type="button"
+              disabled={imageBusy}
+              className="inline-flex items-center gap-2 border bg-white px-3 py-2 text-xs font-medium"
+              style={{ borderColor: TOK.cardBorder, color: TOK.textPrimary }}
+              onClick={() => imageInputRef.current?.click()}
+            >
+              {imageBusy ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <ImagePlus className="size-4" aria-hidden strokeWidth={1.75} />
+              )}
+              {imageBusy ? "Extracting…" : "Import image"}
+            </button>
+            <span className="text-[11px]">
+              Or drop a file anywhere in the paste area (including over the text box).
+            </span>
+          </div>
+        </div>
+      ) : null}
+      {imageErr ? (
+        <p className="mt-2 text-[12px] text-red-600" role="alert">
+          {imageErr}
+        </p>
+      ) : null}
       <textarea
         id={id}
         spellCheck={false}
@@ -665,6 +849,7 @@ function PasteDataBlock({
         placeholder={example}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onPaste={chartKind ? onPasteImage : undefined}
       />
       {error ? (
         <p className="mt-2 text-[12px] text-red-600" role="alert">
@@ -786,6 +971,10 @@ export function GraphicsStudio() {
   const [dotFoot, setDotFoot] = useState(
     "Connectors emphasize movement from baseline toward D′ and C′."
   );
+  /** Editable labels for the chart legend strip and manual column headers (defaults use prime notation). */
+  const [dotLegendBaseline, setDotLegendBaseline] = useState("Baseline");
+  const [dotLegendD, setDotLegendD] = useState("D′");
+  const [dotLegendC, setDotLegendC] = useState("C′");
 
   const [matrixCols, setMatrixCols] = useState<MatrixCol[]>([
     { id: nid("mc"), label: "Discover" },
@@ -917,7 +1106,9 @@ export function GraphicsStudio() {
         setBarRows(r.rows);
         if (r.legendC) setBarLegendC(r.legendC);
         if (r.legendD) setBarLegendD(r.legendD);
-        setBarDataMode("manual");
+        setPasteBar(tsv);
+        setBarDataMode("paste");
+        setStudioSection("graphics");
       } else if (tab === "dot") {
         setPasteDotErr(null);
         const r = parseDotPaste(tsv);
@@ -926,7 +1117,9 @@ export function GraphicsStudio() {
           return;
         }
         setDotRows(r.rows);
-        setDotDataMode("manual");
+        setPasteDot(tsv);
+        setDotDataMode("paste");
+        setStudioSection("graphics");
       } else if (tab === "matrix") {
         setPasteMatrixErr(null);
         const r = parseMatrixPaste(tsv);
@@ -936,7 +1129,9 @@ export function GraphicsStudio() {
         }
         setMatrixCols(r.cols);
         setMatrixRows(r.rows);
-        setMatrixDataMode("manual");
+        setPasteMatrix(tsv);
+        setMatrixDataMode("paste");
+        setStudioSection("graphics");
       } else {
         setPasteFlowErr(null);
         const r = parseFlowPaste(tsv);
@@ -948,7 +1143,9 @@ export function GraphicsStudio() {
         setFlowNodes(r.nodes);
         setFlowEdges(r.edges);
         setEdgeDraft({ fromId: "", toId: "", label: "" });
-        setFlowDataMode("manual");
+        setPasteFlow(tsv);
+        setFlowDataMode("paste");
+        setStudioSection("graphics");
       }
     },
     [tab]
@@ -1170,19 +1367,37 @@ export function GraphicsStudio() {
     const padBottom =
       28 + (dotXL.trim() ? 22 : 0) + (dotFoot.trim() ? 30 : 0);
     /** Left strip for vertical Y caption ("Trials"); row labels sit to its right, never under the plot. */
-    const yCaptionStrip = dotYL.trim() ? 36 : 0;
-    /** Reserved width for row names (right-aligned); keeps dots / zero line off label text. */
-    const labelColumnW = 212;
-    const plotRightPad = 48;
+    const yCaptionStrip = dotYL.trim() ? 28 : 0;
+    /** Row labels are right-aligned — width follows longest label (~13px font ≈ 7px/ch), not a fixed 212px gap. */
+    const longestChars =
+      parsedDots.length === 0
+        ? 14
+        : Math.max(...parsedDots.map((r) => r.label.length), 4);
+    const labelColumnW = Math.min(320, Math.max(52, Math.ceil(longestChars * 7.2) + 18));
+    const plotRightPad = 36;
     const w = 720;
     const plotLeft = yCaptionStrip + labelColumnW;
     const rowH = 44;
     const h = padTop + Math.max(parsedDots.length, 1) * rowH + padBottom + 24;
     const plotW = Math.max(140, w - plotLeft - plotRightPad);
     const vals = parsedDots.flatMap((r) => [r.baseline, r.dPrime, r.cPrime]);
-    const vmin = vals.length ? Math.min(0, ...vals) : 0;
-    const vmax = vals.length ? Math.max(100, ...vals) : 100;
+    /** Padded data-driven domain (clamped 0–100) avoids empty band when all scores sit mid-range. */
+    let vmin = 0;
+    let vmax = 100;
+    if (vals.length) {
+      const dataMin = Math.min(...vals);
+      const dataMax = Math.max(...vals);
+      const innerSpan = Math.max(dataMax - dataMin, 1);
+      const pad = Math.max(4, innerSpan * 0.08);
+      vmin = Math.max(0, dataMin - pad);
+      vmax = Math.min(100, dataMax + pad);
+      if (vmax <= vmin) {
+        vmin = 0;
+        vmax = 100;
+      }
+    }
     const span = vmax - vmin || 1;
+    const zeroInDomain = vmin <= 0 && vmax >= 0;
 
     const xFor = (v: number) => plotLeft + ((v - vmin) / span) * plotW;
 
@@ -1210,14 +1425,16 @@ export function GraphicsStudio() {
             {dotTitle}
           </text>
         )}
-        <line
-          x1={xFor(0)}
-          y1={padTop}
-          x2={xFor(0)}
-          y2={h - padBottom + 8}
-          stroke={COL.zeroLine}
-          strokeWidth={1}
-        />
+        {zeroInDomain ? (
+          <line
+            x1={xFor(0)}
+            y1={padTop}
+            x2={xFor(0)}
+            y2={h - padBottom + 8}
+            stroke={COL.zeroLine}
+            strokeWidth={1}
+          />
+        ) : null}
         {[vmin, vmin + span * 0.25, vmin + span * 0.5, vmin + span * 0.75, vmax].map(
           (tick) => (
             <g key={`tick-${tick}`}>
@@ -1237,13 +1454,13 @@ export function GraphicsStudio() {
         )}
         {dotYL.trim() && (
           <text
-            x={Math.max(12, yCaptionStrip / 2)}
+            x={14}
             y={padTop + (parsedDots.length * rowH) / 2}
             fill={TOK.textPrimary}
             fontSize={12}
             fontWeight={500}
             fontFamily={FONT_SANS}
-            transform={`rotate(-90 ${Math.max(12, yCaptionStrip / 2)} ${padTop + (parsedDots.length * rowH) / 2})`}
+            transform={`rotate(-90 14 ${padTop + (parsedDots.length * rowH) / 2})`}
           >
             {dotYL}
           </text>
@@ -2079,6 +2296,7 @@ export function GraphicsStudio() {
               >
                 <PasteDataBlock
                   embedded
+                  chartKind="bar"
                   id="studio-paste-bar"
                   hint={
                     <>
@@ -2170,6 +2388,42 @@ export function GraphicsStudio() {
               setFooter={setDotFoot}
             />
 
+            <div
+              className="mt-6 grid gap-3 border-t pt-4 sm:grid-cols-3"
+              style={{ borderColor: BORDER_TIGHT }}
+            >
+              <label className="block font-sans">
+                <span className={labelSpanStyle}>Legend — baseline</span>
+                <input
+                  className="mt-1 w-full border bg-white px-3 py-2 text-sm outline-none"
+                  style={{ borderColor: BORDER_TIGHT, color: TOK.textPrimary }}
+                  value={dotLegendBaseline}
+                  onChange={(e) => setDotLegendBaseline(e.target.value)}
+                  aria-label="Legend label for baseline point"
+                />
+              </label>
+              <label className="block font-sans">
+                <span className={labelSpanStyle}>Legend — middle point</span>
+                <input
+                  className="mt-1 w-full border bg-white px-3 py-2 text-sm outline-none"
+                  style={{ borderColor: BORDER_TIGHT, color: TOK.textPrimary }}
+                  value={dotLegendD}
+                  onChange={(e) => setDotLegendD(e.target.value)}
+                  aria-label="Legend label for middle trajectory point"
+                />
+              </label>
+              <label className="block font-sans">
+                <span className={labelSpanStyle}>Legend — end point</span>
+                <input
+                  className="mt-1 w-full border bg-white px-3 py-2 text-sm outline-none"
+                  style={{ borderColor: BORDER_TIGHT, color: TOK.textPrimary }}
+                  value={dotLegendC}
+                  onChange={(e) => setDotLegendC(e.target.value)}
+                  aria-label="Legend label for end trajectory point"
+                />
+              </label>
+            </div>
+
             <DataEntryModeTabs
               idPrefix="studio-dot-data"
               value={dotDataMode}
@@ -2196,13 +2450,16 @@ export function GraphicsStudio() {
                     }}
                   >
                     <span className="inline-flex items-center gap-2">
-                      <span className="size-3.5 shrink-0 rounded-full" style={{ border: `1px solid ${TOK.barSecondary}`, background: COL.baselineDot }} /> Baseline
+                      <span className="size-3.5 shrink-0 rounded-full" style={{ border: `1px solid ${TOK.barSecondary}`, background: COL.baselineDot }} />{" "}
+                      {dotLegendBaseline.trim() || "Baseline"}
                     </span>
                     <span className="inline-flex items-center gap-2">
-                      <span className="size-3.5 shrink-0 rounded-full" style={{ border: `1px solid ${TOK.barSecondary}`, background: COL.dPrimeDot }} /> D′
+                      <span className="size-3.5 shrink-0 rounded-full" style={{ border: `1px solid ${TOK.barSecondary}`, background: COL.dPrimeDot }} />{" "}
+                      {dotLegendD.trim() || "D′"}
                     </span>
                     <span className="inline-flex items-center gap-2">
-                      <span className="size-3.5 shrink-0 rounded-full" style={{ border: `1px solid ${TOK.barSecondary}`, background: COL.cPrimeDot }} /> C′
+                      <span className="size-3.5 shrink-0 rounded-full" style={{ border: `1px solid ${TOK.barSecondary}`, background: COL.cPrimeDot }} />{" "}
+                      {dotLegendC.trim() || "C′"}
                     </span>
                   </div>
 
@@ -2316,10 +2573,10 @@ export function GraphicsStudio() {
                         <div key={key} className="flex flex-col gap-1">
                           <span className="text-[11px]" style={{ color: COL.label }}>
                             {key === "baseline"
-                              ? "Baseline"
+                              ? dotLegendBaseline.trim() || "Baseline"
                               : key === "dPrime"
-                              ? "D′"
-                              : "C′"}
+                                ? dotLegendD.trim() || "D′"
+                                : dotLegendC.trim() || "C′"}
                           </span>
                           <StepControl
                             value={row[key]}
@@ -2356,6 +2613,7 @@ export function GraphicsStudio() {
                 >
                   <PasteDataBlock
                     embedded
+                    chartKind="dot"
                     id="studio-paste-dot"
                     hint={
                       <>
@@ -2671,6 +2929,7 @@ export function GraphicsStudio() {
                 >
                   <PasteDataBlock
                     embedded
+                    chartKind="matrix"
                     id="studio-paste-matrix"
                     hint={
                       <>
@@ -3111,6 +3370,7 @@ export function GraphicsStudio() {
                 >
                   <PasteDataBlock
                     embedded
+                    chartKind="flow"
                     id="studio-paste-flow"
                     hint={
                       <>

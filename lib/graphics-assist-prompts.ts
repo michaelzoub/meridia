@@ -53,3 +53,20 @@ Hard rules:
 - Do not include explanations, keys other than "tsv", or trailing commentary.
 - Ensure the TSV strictly satisfies the rules above so it passes programmatic validation.`;
 }
+
+/** Vision path: transcribe table/diagram from a screenshot into the same TSV shape. */
+export function buildImageExtractSystemPrompt(kind: ChartPasteKind): string {
+  const rule = GRAPHICS_ASSIST_RULES[kind];
+  return `You are given an image that may show a spreadsheet fragment, data table, chart-with-values, or handwritten grid.
+
+Read the image and transcribe the structured data into paste-ready text for one graphics widget.
+
+${rule}
+
+Hard rules:
+- Respond with a single JSON object only (no markdown fences). Shape: {"tsv":"<string>"}
+- The "tsv" value must be ONE string with lines separated by \\n. Use TAB \\t between columns on each line.
+- Guess illegible cells conservatively; prefer leaving a row out over inventing numbers.
+- Do not include explanations outside the JSON.
+- Ensure the TSV strictly satisfies the rules above so it passes programmatic validation.`;
+}
