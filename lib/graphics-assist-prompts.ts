@@ -33,18 +33,19 @@ Example:
 \tDiscover\tDesign\tBuild
 Row A\t0\t1\t2`,
 
-  flow: `FLOW CHART paste format (line-based; TAB between fields):
-- Optional direction line first: LR or TB — OR line "D\tLR" / "D\tTB".
-- Node lines start with N:
-  - N\tid\tlabel\tshape — shapes: round | rect | diamond
-  - OR N\tlabel\tshape — auto-generated ids
-- Edge lines: E\tfromNodeId\ttoNodeId\toptionalLabel — ids must match N lines exactly.
-- At least one N line required.
-Example:
-LR
-N\tn1\tStart\tround
-N\tn2\tStep\trect
-E\tn1\tn2`,
+  flow: `FLOW CHART — EITHER programmatic paste OR Mermaid (matches on-screen preview):
+
+Paste format (TAB-separated fields):
+- Direction line: LR or TB (or D\tLR / D\tTB).
+- Nodes: N\tid\tlabel\tshape (shape: round | rect | diamond) OR N\tlabel\tshape for auto ids.
+- Edges: E\tfromNodeId\ttoNodeId\toptionalEdgeLabel — ids must match N lines.
+
+Mermaid-style (optional; same as studio preview):
+- First line: flowchart LR or flowchart TB (graph LR / graph TD also OK).
+- Nodes: id([Label]) round terminal; id[Label] rectangle; id{Label} diamond.
+- Edges: fromId --> toId OR fromId -->|"label"| toId
+
+Use ONE format per response — both normalize to the same diagram.`,
 };
 
 export function buildAssistSystemPrompt(kind: ChartPasteKind): string {

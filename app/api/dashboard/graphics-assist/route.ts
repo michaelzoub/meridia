@@ -4,6 +4,8 @@ import type { NextRequest } from "next/server";
 import { buildAssistSystemPrompt } from "@/lib/graphics-assist-prompts";
 import { extractTsvFromModelJson } from "@/lib/extract-tsv-from-model-json";
 import {
+  parseFlowPaste,
+  serializeFlowPasteOk,
   validatePasteForChart,
   type ChartPasteKind,
 } from "@/lib/graphics-paste-parsers";
@@ -100,6 +102,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  let outTsv = tsvExtracted.trim();
+  if (chartKind === "flow") {
+    const pr = parseFlowPaste(outTsv);
+    if (pr.ok) outTsv = serializeFlowPasteOk(pr);
+  }
+
   console.info("[graphics-assist] ok", chartKind);
-  return NextResponse.json({ ok: true, tsv: tsvExtracted });
+  return NextResponse.json({ ok: true, tsv: outTsv });
 }

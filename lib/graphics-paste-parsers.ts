@@ -229,7 +229,129 @@ function parseShape(s: string): FlowShape | null {
   return null;
 }
 
-export function parseFlowPaste(text: string): FlowPasteResult {
+function stripFlowLabelQuotes(s: string): string {
+  const t = s.trim();
+  if (t.length >= 2) {
+    const q = t[0];
+    if ((q === '"' || q === "'") && t[t.length - 1] === q) return t.slice(1, -1);
+  }
+  return t;
+}
+
+/**
+ * Vision models often return Mermaid (matching on-screen flow preview) instead of N/E/D paste lines.
+ * Converts a subset: flowchart/graph direction, id([round]), id[rect], id{diamond}, --> edges.
+ */
+function tryConvertMermaidFlowchartToPaste(text: string): string | null {
+  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  if (!lines.length) return null;
+
+  const looksMermaid = lines.some(
+    (l) =>
+      /^flowchart\s+/i.test(l) ||
+      /^graph\s+/i.test(l) ||
+      l.includes("-->") ||
+      /\(\[[^\]]*\]\)/.test(l) ||
+      /^\w+\[[^\]]+\]$/.test(l) ||
+      /^\w+\{[^}]*\}$/.test(l)
+  );
+  if (!looksMermaid) return null;
+
+  let direction: "LR" | "TB" = "LR";
+  const nodes: { id: string; label: string; shape: FlowShape }[] = [];
+  const edges: { fromId: string; toId: string; label: string }[] = [];
+  const seenIds = new Set<string>();
+
+  const pushNode = (id: string, label: string, shape: FlowShape) => {
+    if (seenIds.has(id)) return;
+    seenIds.add(id);
+    nodes.push({
+      id,
+      label: stripFlowLabelQuotes(label).replace(/\t/g, " ").trim() || id,
+      shape,
+    });
+  };
+
+  for (const line of lines) {
+    if (/^%%/.test(line)) continue;
+    if (/^subgraph\s/i.test(line) || line.toLowerCase() === "end") continue;
+
+    let m = /^flowchart\s+(LR|TB)$/i.exec(line);
+    if (m) {
+      direction = m[1].toUpperCase() as "LR" | "TB";
+      continue;
+    }
+    m = /^graph\s+(LR|TB|TD)$/i.exec(line);
+    if (m) {
+      const g = m[1].toUpperCase();
+      direction = g === "TD" ? "TB" : (g as "LR" | "TB");
+      continue;
+    }
+
+    m = /^([\w.-]+)\(\[([^\]]*)\]\)\s*$/.exec(line);
+    if (m) {
+      pushNode(m[1], m[2], "round");
+      continue;
+    }
+    m = /^([\w.-]+)\[([^\]]+)\]\s*$/.exec(line);
+    if (m && !line.includes("([")) {
+      pushNode(m[1], m[2], "rect");
+      continue;
+    }
+    m = /^([\w.-]+)\{([^}]*)\}\s*$/.exec(line);
+    if (m) {
+      pushNode(m[1], m[2], "diamond");
+      continue;
+    }
+
+    m = /^([\w.-]+)\s*-->\s*\|"([^"]*)"\|\s*([\w.-]+)\s*$/.exec(line);
+    if (m) {
+      edges.push({ fromId: m[1], toId: m[3], label: m[2] });
+      continue;
+    }
+    m = /^([\w.-]+)\s*-->\s*([\w.-]+)\s*$/.exec(line);
+    if (m) {
+      edges.push({ fromId: m[1], toId: m[2], label: "" });
+      continue;
+    }
+  }
+
+  if (!nodes.length && !edges.length) return null;
+
+  for (const e of edges) {
+    if (!seenIds.has(e.fromId)) pushNode(e.fromId, e.fromId, "rect");
+    if (!seenIds.has(e.toId)) pushNode(e.toId, e.toId, "rect");
+  }
+
+  const out: string[] = [direction];
+  for (const n of nodes) {
+    out.push(`N\t${n.id}\t${n.label}\t${n.shape}`);
+  }
+  for (const e of edges) {
+    out.push(`E\t${e.fromId}\t${e.toId}\t${e.label}`);
+  }
+  return out.join("\n");
+}
+
+/** Canonical N/E/D paste text for successful flow parses (stable paste buffer). */
+export function serializeFlowPasteOk(
+  r: Extract<FlowPasteResult, { ok: true }>
+): string {
+  const lines: string[] = [r.direction];
+  for (const n of r.nodes) {
+    lines.push(
+      `N\t${n.id}\t${n.label.replace(/\t/g, " ")}\t${n.shape}`
+    );
+  }
+  for (const e of r.edges) {
+    lines.push(
+      `E\t${e.fromId}\t${e.toId}\t${e.label.replace(/\t/g, " ")}`
+    );
+  }
+  return lines.join("\n");
+}
+
+function parseFlowPasteNed(text: string): FlowPasteResult {
   const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
   if (!lines.length) return { ok: false, error: "Paste at least one line." };
 
@@ -333,6 +455,18 @@ export function parseFlowPaste(text: string): FlowPasteResult {
   }
 
   return { ok: true, direction, nodes, edges };
+}
+
+export function parseFlowPaste(text: string): FlowPasteResult {
+  const trimmed = text.trim();
+  const direct = parseFlowPasteNed(trimmed);
+  if (direct.ok) return direct;
+  const converted = tryConvertMermaidFlowchartToPaste(trimmed);
+  if (converted) {
+    const second = parseFlowPasteNed(converted);
+    if (second.ok) return second;
+  }
+  return direct;
 }
 
 /** Server/client: validate raw paste text for a chart kind (same rules as Apply paste). */
