@@ -12,12 +12,18 @@ Quarter\tSeries A\tSeries B
 Q1\t42\t33`,
 
   dot: `DOT PLOT paste format (TAB-separated preferred):
-- Each DATA row needs exactly 4 columns: Label<TAB>baseline<TAB>Dprime<TAB>Cprime (semantic names D′/C′ are editorial).
-- Optional HEADER row: Label, Baseline, D or D', C or C' — recognized column names; skip header if columns 2–4 look like names not numbers.
-- All three numeric columns must be parseable numbers (decimals OK; stored rounded).
+- Each DATA row: Label<TAB>baseline<TAB>Dprime<TAB>Cprime (four numeric columns; decimals OK; rounded when stored).
+- Optional HEADER row if columns 2–4 are names, not numbers.
+
+**Benchmark / evaluation tables** (correct %, incorrect %, F1, extraneous, etc.):
+- baseline = primary **accuracy / fully correct** % (0–100, higher is better).
+- D′ = **F1** or another quality score already on 0–100 (higher is better).
+- C′ = a third **higher-is-better** score on 0–100. For "fully incorrect %" or any **lower-is-better** error rate, use **C′ = 100 − that percentage** so it aligns with baseline/D′. Never put raw high error % in C′ next to low correct % — that falsely widens rows (e.g. Haiku with ~13% correct and ~71% incorrect should not use 71 as C′; use ~29 for 100−71).
+- If the source has only two metrics plus labels, derive a third comparable score or repeat with clear semantics—do not mix incompatible scales.
+
 Example:
 Model\tBaseline\tD'\tC'
-Alpha\t0\t45\t72`,
+Alpha\t66\t82\t29`,
 
   matrix: `LIFECYCLE MATRIX paste format:
 - Row 1 HEADER: first cell row-label column (may be empty); remaining cells = column phase names.

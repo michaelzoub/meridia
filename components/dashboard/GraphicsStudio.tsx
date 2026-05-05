@@ -1360,10 +1360,10 @@ export function GraphicsStudio() {
 
   const dotVisualization = useMemo(() => {
     const hasTitle = Boolean(dotTitle.trim());
-    /** Title (~y22, 18px) and x-axis value ticks must not share the same band — was padTop 40 with ticks at y28. */
-    const padTop = hasTitle ? 56 : 18;
-    const titleBaselineY = 22;
-    const xTickLabelY = hasTitle ? 46 : 12;
+    /** Extra top padding so title clears x-axis tick labels. */
+    const padTop = hasTitle ? 68 : 18;
+    const titleBaselineY = 20;
+    const xTickLabelY = hasTitle ? 54 : 12;
     const padBottom =
       28 + (dotXL.trim() ? 22 : 0) + (dotFoot.trim() ? 30 : 0);
     /** Left strip for vertical Y caption ("Trials"); row labels sit to its right, never under the plot. */
@@ -1549,10 +1549,10 @@ export function GraphicsStudio() {
     const innerW = w - ml - mr;
     const cellW = (innerW - (nC - 1) * gap) / nC;
     const colHeaderH = 34;
-    const titleH = matrixTitle.trim() ? 42 : 10;
+    const titleH = matrixTitle.trim() ? 50 : 10;
     const legendH = 40;
     const footerH = matrixFoot.trim() ? 34 : 12;
-    const mt = 18;
+    const mt = 26;
     const matrixTop = mt + titleH;
     const matrixBgY = matrixTop + colHeaderH;
     const h = matrixBgY + innerH + legendH + footerH + 18;
@@ -1589,7 +1589,7 @@ export function GraphicsStudio() {
         {matrixTitle.trim() ? (
           <text
             x={w / 2}
-            y={mt + 26}
+            y={mt + 28}
             textAnchor="middle"
             fill={TOK.textPrimary}
             fontSize={18}
